@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "343276619236",
+    "project_id": "crmmindrevive",
+    "storage_bucket": "crmmindrevive.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:343276619236:android:447c7d031d8a57a63433f1",
+        "android_client_info": {
+          "package_name": "com.appclass.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWPIOxPZbLrD1IjC7jBasvyghu3u1U9HU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
