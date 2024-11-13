@@ -1,4 +1,4 @@
-package com.appclass.pruebasautentificacion.screens
+package com.appclass.myapplication.screens
 
 import android.util.Log
 import android.widget.Space
@@ -114,6 +114,7 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // NOMBRE
+
         OutlinedTextField(
             value = nombre,
             onValueChange = { nombre = it },
