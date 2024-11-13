@@ -35,7 +35,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.appclass.pruebasautentificacion.R
+import com.appclass.myapplication.R
+//import com.appclass.pruebasautentificacion.R
 import com.google.firebase.Firebase
 
 import com.google.firebase.auth.FirebaseAuth
