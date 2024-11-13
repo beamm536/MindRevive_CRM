@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -33,8 +35,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.Visibility
 import androidx.navigation.NavController
 import com.appclass.myapplication.ui.theme.MarronBtns
 import com.appclass.myapplication.ui.theme.MoradoTextFields
@@ -99,6 +103,10 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+
+    //variable pra la contraseña visible
+    var passVisible by remember { mutableStateOf(false) } //q no vea al principio
+    var passVisible2 by remember { mutableStateOf(false) }
 
     //DECLARACION DE LAS BD A USAR
     var auth = FirebaseAuth.getInstance()
@@ -165,7 +173,16 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
                 focusedBorderColor = MoradoTextFields,
                 cursorColor = MoradoTextFields
             ),
-            visualTransformation = PasswordVisualTransformation()//para q la contraseña salga oculta
+            visualTransformation = if (passVisible) VisualTransformation.None
+                                    else PasswordVisualTransformation(),
+            //visualTransformation = PasswordVisualTransformation() ---> en dudas/apuntesRegistro
+
+            trailingIcon = {
+                val iconoVisibilidad = if (passVisible) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
+                IconButton(onClick = { passVisible = !passVisible }) {
+                    Icon(imageVector = iconoVisibilidad, contentDescription = if (passVisible) "Ocultar contraseña" else "Mostrar contraseña")
+                }
+            }
         )
 
         // CONFIRMAR CONTRASEÑA
@@ -178,7 +195,16 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
                 unfocusedBorderColor = Color.Gray,
                 focusedBorderColor = MoradoTextFields,
                 cursorColor = MoradoTextFields
-            )
+            ),
+            visualTransformation = if (passVisible2) VisualTransformation.None
+            else PasswordVisualTransformation(),
+
+            trailingIcon = {
+                val iconoVisibilidad = if (passVisible2) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
+                IconButton(onClick = { passVisible2 = !passVisible2 }) {
+                    Icon(imageVector = iconoVisibilidad, contentDescription = if (passVisible2) "Ocultar contraseña" else "Mostrar contraseña")
+                }
+            }
         )
 
 
