@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.appclass.myapplication.ui.theme.MyApplicationTheme
+import com.example.vistasclientes.NavigationWrapper
 
 class MainActivity : ComponentActivity() {
     private lateinit var navHostController: NavHostController
