@@ -114,6 +114,7 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // NOMBRE
+
         OutlinedTextField(
             value = nombre,
             onValueChange = { nombre = it },
