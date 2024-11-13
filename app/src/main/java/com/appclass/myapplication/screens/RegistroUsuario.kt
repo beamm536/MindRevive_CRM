@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -32,8 +34,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.Visibility
 import androidx.navigation.NavController
 import com.appclass.myapplication.ui.theme.MarronBtns
 import com.appclass.myapplication.ui.theme.MoradoTextFields
@@ -99,6 +104,10 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 
+    //variable pra la contraseña visible
+    var passVisible by remember { mutableStateOf(false) } //q no vea al principio
+    var passVisible2 by remember { mutableStateOf(false) }
+
     //DECLARACION DE LAS BD A USAR
     var auth = FirebaseAuth.getInstance()
     var dbFirestore = FirebaseFirestore.getInstance()
@@ -163,7 +172,17 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
                 unfocusedBorderColor = Color.Gray,
                 focusedBorderColor = MoradoTextFields,
                 cursorColor = MoradoTextFields
-            )
+            ),
+            visualTransformation = if (passVisible) VisualTransformation.None
+                                    else PasswordVisualTransformation(),
+            //visualTransformation = PasswordVisualTransformation() ---> en dudas/apuntesRegistro
+
+            trailingIcon = {
+                val iconoVisibilidad = if (passVisible) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
+                IconButton(onClick = { passVisible = !passVisible }) {
+                    Icon(imageVector = iconoVisibilidad, contentDescription = if (passVisible) "Ocultar contraseña" else "Mostrar contraseña")
+                }
+            }
         )
 
         // CONFIRMAR CONTRASEÑA
@@ -176,7 +195,16 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
                 unfocusedBorderColor = Color.Gray,
                 focusedBorderColor = MoradoTextFields,
                 cursorColor = MoradoTextFields
-            )
+            ),
+            visualTransformation = if (passVisible2) VisualTransformation.None
+            else PasswordVisualTransformation(),
+
+            trailingIcon = {
+                val iconoVisibilidad = if (passVisible2) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
+                IconButton(onClick = { passVisible2 = !passVisible2 }) {
+                    Icon(imageVector = iconoVisibilidad, contentDescription = if (passVisible2) "Ocultar contraseña" else "Mostrar contraseña")
+                }
+            }
         )
 
 
@@ -186,76 +214,72 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
         // BTN CREAR CUENTA
         Button(
             onClick = {
-                if (password == confirmPassword && nombre.isNotEmpty() && email.isNotEmpty()) {
-                    auth.createUserWithEmailAndPassword(email, password)//crea al usuario y deberia guardarlo en firebaseAUTH
-
-                        //segun el resultado q nos ha dado el registro, es decir si se ha cumplido la condicion de los campos
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) { //si ha sido exitoso
-
-                                val user = hashMapOf(
-                                    "nombre" to nombre,
-                                    "email" to email,
-                                    "apellido" to apellidos
-                                )
-
-
-                                val userID = task.result?.user?.uid //coger el valor aleatorio de fb para identificar al usuario
-                                if (userID != null) {
-                                    dbFirestore.collection("usuariosCRM").document(userID).set(user)
-                                        .addOnSuccessListener {
-                                            // Éxito al guardar en Firestore
-                                        }
-                                        .addOnFailureListener {
-                                            // Manejo de errores al guardar en Firestore
-                                        }
-                                } else {
-                                    // Manejo de caso donde el userID es null
-                                    Log.e("Error", "El userID es null")
-                                }
-                                //val usuarioActual = auth.currentUser //pillamos al usuario
-
-//                                if (usuarioActual != null){
-//                                    //si el usuario pillado, si ha encontrado un usuario --> es distinto de null ===> EL USUARIO ESTÁ REGISTRADO Y DENTRO DE LA APP
-//
-//                                    //PARA ACCEDER AL *UID* DEL USUARIO
-//                                    val userId = it.uid
-//
-//                                    errorMessage = "usurio autenticado"
-//
-//                                }else{
-//
-//                                    //else ==> no hay usuario registrado o dentro de la aplicacion
-//                                    //Text(text = "Usuario no autenticado")
-//                                    errorMessage = "Error al crear el usuario"
-//                                }
-
-
-
-                                /*userId?.let {
-                                    dbFirestore.collection("usuarios").document(it).set(user)
-                                        .addOnSuccessListener {
-                                            // Éxito al guardar en Firestore
-                                        }
-                                        .addOnFailureListener {
-                                            // Manejo de errores al guardar en Firestore
-                                        }
-                                }*/
-                            } else {
-                                // Manejo de errores al crear el usuario en Auth
-                                errorMessage = "usurio no autenticado"
-                            }
-                        }
-                } else {
-                    // Mostrar mensaje de error si las contraseñas no coinciden o si los campos están vacíos
-                    errorMessage = "Las contraseñas no coinciden o hay campos vacíos"
-                }
+                OnclickBtnRegistrar(
+                    nombre = nombre,
+                    email = email,
+                    password = password,
+                    confirmPassword = confirmPassword,
+                    onError = { message -> errorMessage = message }
+                )
             },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(containerColor = MarronBtns)
         ) {
             Text("Create an account")
         }
+    }
+}
+
+
+fun OnclickBtnRegistrar(
+    nombre: String,
+    email: String,
+    password: String,
+    confirmPassword: String,
+    onError: (String) -> Unit
+){
+
+    //variable pra la contraseña visible
+    //var passVisible by remember { mutableStateOf(false) } //q no vea al principio
+    //var passVisible2 by remember { mutableStateOf(false) }
+
+    //DECLARACION DE LAS BD A USAR
+    var auth = FirebaseAuth.getInstance()
+    var dbFirestore = FirebaseFirestore.getInstance()
+
+
+    if (password == confirmPassword && nombre.isNotEmpty() && email.isNotEmpty()) {
+        auth.createUserWithEmailAndPassword(email, password)//crea al usuario y deberia guardarlo en firebaseAUTH
+
+
+
+            //segun el resultado q nos ha dado el registro, es decir si se ha cumplido la condicion de los campos
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) { //si ha sido exitoso
+
+                    var user = auth.currentUser
+                    user?.let {
+                        //parametros ordenados
+                        val datosUser = User(uid = it.uid, nombre = nombre, email = email)
+
+                        dbFirestore.collection("usuariosCRM").document(it.uid).set(datosUser)
+                            .addOnSuccessListener {
+                                // Éxito al guardar en Firestore
+                            }
+                            .addOnFailureListener {
+                                // Manejo de errores al guardar en Firestore
+                            }
+                    }
+
+
+                } else {
+                    // Manejo de errores al crear el usuario en Auth
+                    onError ("usurio no autenticado")
+                }
+            }
+    } else {
+        // Mostrar mensaje de error si las contraseñas no coinciden o si los campos están vacíos
+        onError ("Las contraseñas no coinciden o hay campos vacíos")
     }
 }
 
