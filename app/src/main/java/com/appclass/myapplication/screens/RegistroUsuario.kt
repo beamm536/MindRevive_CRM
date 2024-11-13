@@ -214,45 +214,72 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
         // BTN CREAR CUENTA
         Button(
             onClick = {
-                if (password == confirmPassword && nombre.isNotEmpty() && email.isNotEmpty()) {
-                    auth.createUserWithEmailAndPassword(email, password)//crea al usuario y deberia guardarlo en firebaseAUTH
-
-
-
-                        //segun el resultado q nos ha dado el registro, es decir si se ha cumplido la condicion de los campos
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) { //si ha sido exitoso
-
-                                var user = auth.currentUser
-                                user?.let {
-                                    //parametros ordenados
-                                    val datosUser = User(uid = it.uid, nombre = nombre, email = email)
-
-                                    dbFirestore.collection("usuariosCRM").document(it.uid).set(datosUser)
-                                        .addOnSuccessListener {
-                                            // Éxito al guardar en Firestore
-                                        }
-                                        .addOnFailureListener {
-                                            // Manejo de errores al guardar en Firestore
-                                        }
-                                }
-
-
-                            } else {
-                                // Manejo de errores al crear el usuario en Auth
-                                errorMessage = "usurio no autenticado"
-                            }
-                        }
-                } else {
-                    // Mostrar mensaje de error si las contraseñas no coinciden o si los campos están vacíos
-                    errorMessage = "Las contraseñas no coinciden o hay campos vacíos"
-                }
+                OnclickBtnRegistrar(
+                    nombre = nombre,
+                    email = email,
+                    password = password,
+                    confirmPassword = confirmPassword,
+                    onError = { message -> errorMessage = message }
+                )
             },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(containerColor = MarronBtns)
         ) {
             Text("Create an account")
         }
+    }
+}
+
+
+fun OnclickBtnRegistrar(
+    nombre: String,
+    email: String,
+    password: String,
+    confirmPassword: String,
+    onError: (String) -> Unit
+){
+
+    //variable pra la contraseña visible
+    //var passVisible by remember { mutableStateOf(false) } //q no vea al principio
+    //var passVisible2 by remember { mutableStateOf(false) }
+
+    //DECLARACION DE LAS BD A USAR
+    var auth = FirebaseAuth.getInstance()
+    var dbFirestore = FirebaseFirestore.getInstance()
+
+
+    if (password == confirmPassword && nombre.isNotEmpty() && email.isNotEmpty()) {
+        auth.createUserWithEmailAndPassword(email, password)//crea al usuario y deberia guardarlo en firebaseAUTH
+
+
+
+            //segun el resultado q nos ha dado el registro, es decir si se ha cumplido la condicion de los campos
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) { //si ha sido exitoso
+
+                    var user = auth.currentUser
+                    user?.let {
+                        //parametros ordenados
+                        val datosUser = User(uid = it.uid, nombre = nombre, email = email)
+
+                        dbFirestore.collection("usuariosCRM").document(it.uid).set(datosUser)
+                            .addOnSuccessListener {
+                                // Éxito al guardar en Firestore
+                            }
+                            .addOnFailureListener {
+                                // Manejo de errores al guardar en Firestore
+                            }
+                    }
+
+
+                } else {
+                    // Manejo de errores al crear el usuario en Auth
+                    onError ("usurio no autenticado")
+                }
+            }
+    } else {
+        // Mostrar mensaje de error si las contraseñas no coinciden o si los campos están vacíos
+        onError ("Las contraseñas no coinciden o hay campos vacíos")
     }
 }
 
