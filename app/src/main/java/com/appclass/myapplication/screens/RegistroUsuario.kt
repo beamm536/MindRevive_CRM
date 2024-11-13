@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -100,9 +101,13 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
     //DECLARACION DE LAS VARIABLES
     var nombre by remember { mutableStateOf("") }
     var apellidos by remember { mutableStateOf("") }
+    var edad by remember { mutableStateOf(0) }//NO PONERLO CON COMILLAS SI ES UN INTTTT
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+
+    //para q funcione y no de error el txt dentro del btn
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     //variable pra la contraseña visible
     var passVisible by remember { mutableStateOf(false) } //q no vea al principio
@@ -115,133 +120,168 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
 
 
     //CAMPOS FORMULARIO
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // NOMBRE
-
-        OutlinedTextField(
-            value = nombre,
-            onValueChange = { nombre = it },
-            label = { Text("Nombre") },
-            shape = RoundedCornerShape(16.dp),
-            colors = outlinedTextFieldColors(
-                unfocusedBorderColor = Color.Gray,
-                focusedBorderColor = MoradoTextFields,
-                cursorColor = MoradoTextFields
-            )
-        )
-
-        // APELLIDOS
-        OutlinedTextField(
-            value = apellidos,
-            onValueChange = { apellidos = it },
-            label = { Text("Apellidos") },
-            shape = RoundedCornerShape(16.dp),
-            colors = outlinedTextFieldColors(
-                unfocusedBorderColor = Color.Gray,
-                focusedBorderColor = MoradoTextFields,
-                cursorColor = MoradoTextFields
-            )
-        )
-
-        // EMAIL
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") },
-            shape = RoundedCornerShape(16.dp),
-            colors = outlinedTextFieldColors(
-                unfocusedBorderColor = Color.Gray,
-                focusedBorderColor = MoradoTextFields,
-                cursorColor = MoradoTextFields
-            )
-        )
-
-        // CONTRASEÑA
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Contraseña") },
-            shape = RoundedCornerShape(16.dp),
-            colors = outlinedTextFieldColors(
-                unfocusedBorderColor = Color.Gray,
-                focusedBorderColor = MoradoTextFields,
-                cursorColor = MoradoTextFields
-            ),
-            visualTransformation = if (passVisible) VisualTransformation.None
-                                    else PasswordVisualTransformation(),
-            //visualTransformation = PasswordVisualTransformation() ---> en dudas/apuntesRegistro
-
-            trailingIcon = {
-                val iconoVisibilidad = if (passVisible) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
-                IconButton(onClick = { passVisible = !passVisible }) {
-                    Icon(imageVector = iconoVisibilidad, contentDescription = if (passVisible) "Ocultar contraseña" else "Mostrar contraseña")
-                }
-            }
-        )
-
-        // CONFIRMAR CONTRASEÑA
-        OutlinedTextField(
-            value = confirmPassword,
-            onValueChange = { confirmPassword = it },
-            label = { Text("Confirmar Contraseña") },
-            shape = RoundedCornerShape(16.dp),
-            colors = outlinedTextFieldColors(
-                unfocusedBorderColor = Color.Gray,
-                focusedBorderColor = MoradoTextFields,
-                cursorColor = MoradoTextFields
-            ),
-            visualTransformation = if (passVisible2) VisualTransformation.None
-            else PasswordVisualTransformation(),
-
-            trailingIcon = {
-                val iconoVisibilidad = if (passVisible2) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
-                IconButton(onClick = { passVisible2 = !passVisible2 }) {
-                    Icon(imageVector = iconoVisibilidad, contentDescription = if (passVisible2) "Ocultar contraseña" else "Mostrar contraseña")
-                }
-            }
-        )
-
-
-        //para q funcione y no de error el txt dentro del btn
-        var errorMessage by remember { mutableStateOf<String?>(null) }
-
-        // BTN CREAR CUENTA
-        Button(
-            onClick = {
-                OnclickBtnRegistrar(
-                    nombre = nombre,
-                    email = email,
-                    password = password,
-                    confirmPassword = confirmPassword,
-                    onError = { message -> errorMessage = message }
+        item {
+            // NOMBRE
+            OutlinedTextField(
+                value = nombre,
+                onValueChange = { nombre = it },
+                label = { Text("Nombre") },
+                shape = RoundedCornerShape(16.dp),
+                colors = outlinedTextFieldColors(
+                    unfocusedBorderColor = Color.Gray,
+                    focusedBorderColor = MoradoTextFields,
+                    cursorColor = MoradoTextFields
                 )
-            },
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = MarronBtns)
-        ) {
-            Text("Create an account")
+            )
+        }
+
+        item {
+            // APELLIDOS
+            OutlinedTextField(
+                value = apellidos,
+                onValueChange = { apellidos = it },
+                label = { Text("Apellidos") },
+                shape = RoundedCornerShape(16.dp),
+                colors = outlinedTextFieldColors(
+                    unfocusedBorderColor = Color.Gray,
+                    focusedBorderColor = MoradoTextFields,
+                    cursorColor = MoradoTextFields
+                )
+            )
+        }
+
+        item {
+            // EDAD
+            OutlinedTextField(
+                value = nombre,
+                onValueChange = { nombre = it },
+                label = { Text("Edad") },
+                shape = RoundedCornerShape(16.dp),
+                colors = outlinedTextFieldColors(
+                    unfocusedBorderColor = Color.Gray,
+                    focusedBorderColor = MoradoTextFields,
+                    cursorColor = MoradoTextFields
+                )
+            )
+        }
+
+        item {
+            // EMAIL
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Email") },
+                shape = RoundedCornerShape(16.dp),
+                colors = outlinedTextFieldColors(
+                    unfocusedBorderColor = Color.Gray,
+                    focusedBorderColor = MoradoTextFields,
+                    cursorColor = MoradoTextFields
+                )
+            )
+        }
+
+        item {
+            // CONTRASEÑA
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Contraseña") },
+                shape = RoundedCornerShape(16.dp),
+                colors = outlinedTextFieldColors(
+                    unfocusedBorderColor = Color.Gray,
+                    focusedBorderColor = MoradoTextFields,
+                    cursorColor = MoradoTextFields
+                ),
+                visualTransformation = if (passVisible) VisualTransformation.None
+                else PasswordVisualTransformation(),
+                //visualTransformation = PasswordVisualTransformation() ---> en dudas/apuntesRegistro
+
+                trailingIcon = {
+                    val iconoVisibilidad =
+                        if (passVisible) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
+                    IconButton(onClick = {
+                        passVisible = !passVisible
+                    }) { //esto es lo q hace q se vaya cambiando la visibilidad
+                        Icon(
+                            imageVector = iconoVisibilidad,
+                            contentDescription = if (passVisible) "Ocultar contraseña" else "Mostrar contraseña"
+                        )
+                    }
+                }
+            )
+        }
+
+        item {
+            // CONFIRMAR CONTRASEÑA
+            OutlinedTextField(
+                value = confirmPassword,
+                onValueChange = { confirmPassword = it },
+                label = { Text("Confirmar Contraseña") },
+                shape = RoundedCornerShape(16.dp),
+                colors = outlinedTextFieldColors(
+                    unfocusedBorderColor = Color.Gray,
+                    focusedBorderColor = MoradoTextFields,
+                    cursorColor = MoradoTextFields
+                ),
+                visualTransformation = if (passVisible2) VisualTransformation.None
+                else PasswordVisualTransformation(),
+
+                trailingIcon = {
+                    val iconoVisibilidad = if (passVisible2) Icons.Filled.Favorite
+                    else Icons.Filled.FavoriteBorder
+
+                    IconButton(onClick = { passVisible2 = !passVisible2 }) {
+                        Icon(
+                            imageVector = iconoVisibilidad,
+                            contentDescription = if (passVisible2) "Ocultar contraseña" else "Mostrar contraseña"
+                        )
+                    }
+                }
+            )
+        }
+
+
+        item{
+            // BTN CREAR CUENTA
+            Button(
+                onClick = {
+                    OnclickBtnRegistrar(
+                        nombre = nombre,
+                        apellidos = apellidos,
+                        edad = edad,
+                        email = email,
+                        password = password,
+                        confirmPassword = confirmPassword,
+                        onError = { message -> errorMessage = message }
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = MarronBtns)
+            ) {
+                Text("Create an account")
+            }
         }
     }
 }
 
-
+//ESTA FUNCION NO ES COMPOSABLE!!
 fun OnclickBtnRegistrar(
     nombre: String,
+    apellidos: String,
+    edad: Int,
     email: String,
     password: String,
     confirmPassword: String,
     onError: (String) -> Unit
 ){
 
-    //variable pra la contraseña visible
-    //var passVisible by remember { mutableStateOf(false) } //q no vea al principio
-    //var passVisible2 by remember { mutableStateOf(false) }
 
     //DECLARACION DE LAS BD A USAR
     var auth = FirebaseAuth.getInstance()
@@ -260,7 +300,7 @@ fun OnclickBtnRegistrar(
                     var user = auth.currentUser
                     user?.let {
                         //parametros ordenados
-                        val datosUser = User(uid = it.uid, nombre = nombre, email = email)
+                        val datosUser = User(uid = it.uid, nombre = nombre, apellidos = apellidos ,edad = edad,email = email)
 
                         dbFirestore.collection("usuariosCRM").document(it.uid).set(datosUser)
                             .addOnSuccessListener {

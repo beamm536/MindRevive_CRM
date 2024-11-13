@@ -9,3 +9,6 @@ tenemos q tener dos distintas para cada campo de la contraseña, para q no se mu
 
 **trailingIon**
 - es una propiedad del outlinedtextfield para poner iconos pero al final del input/campo:)
+
+## DUDA :)
+- tengo q pasar la edad de tipo INT a String? es necesario??
