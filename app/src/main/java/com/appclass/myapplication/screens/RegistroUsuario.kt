@@ -35,8 +35,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.appclass.pruebasautentificacion.ui.theme.MarronBtns
-import com.appclass.pruebasautentificacion.ui.theme.MoradoTextFields
+import com.appclass.myapplication.ui.theme.MarronBtns
+import com.appclass.myapplication.ui.theme.MoradoTextFields
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -201,7 +201,7 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
 
                                 val userID = task.result?.user?.uid //coger el valor aleatorio de fb para identificar al usuario
                                 if (userID != null) {
-                                    dbFirestore.collection("usuarios").document(userID).set(user)
+                                    dbFirestore.collection("usuariosCRM").document(userID).set(user)
                                         .addOnSuccessListener {
                                             // Éxito al guardar en Firestore
                                         }
