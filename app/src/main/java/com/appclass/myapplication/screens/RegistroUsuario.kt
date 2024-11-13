@@ -1,4 +1,4 @@
-package com.appclass.pruebasautentificacion.screens
+package com.appclass.myapplication.screens
 
 import android.util.Log
 import android.widget.Space

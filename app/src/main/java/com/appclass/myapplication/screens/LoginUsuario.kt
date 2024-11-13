@@ -1,4 +1,4 @@
-package com.appclass.pruebasautentificacion.screens
+package com.appclass.myapplication.screens
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -221,6 +221,6 @@ fun LlamadaFinal(navController: NavController, modifier: Modifier = Modifier){
     //llamada :)
     LoginScreen(onLoginSuccess = {//solo llamamos a esta funcion q es la q tiene algo q mostrar al usuario
         //redirigir al usuario a otra pantalla
-        navController.navigate("LoginSuccess")
+        navController.navigate("pantallaInicio")
     })
 }
