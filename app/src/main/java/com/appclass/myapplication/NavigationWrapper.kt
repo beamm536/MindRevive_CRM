@@ -1,5 +1,7 @@
 package com.example.vistasclientes
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -9,12 +11,15 @@ import com.appclass.myapplication.screens.PantallaInicio
 //import com.appclass.pruebasautentificacion.screens.LoginUsuario
 import com.appclass.myapplication.screens.RegistroUsuario
 import com.appclass.myapplication.screens.LoginUsuario
+import com.appclass.myapplication.screens.Questionario
+
 //import com.appclass.pruebasautentificacion.screens.RegistroUsuario
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationWrapper(navHostController: NavHostController) {
-    NavHost(navController = navHostController, startDestination = "registroUsuario") {
+    NavHost(navController = navHostController, startDestination = "PantallaFormulario") {
         composable("pantallaInicio") { PantallaInicio(navHostController) }
 
         composable("home") { BottomNavigationBarComponent(navHostController) }
@@ -23,5 +28,7 @@ fun NavigationWrapper(navHostController: NavHostController) {
         
         composable("registroUsuario"){ RegistroUsuario (navHostController) }
         composable("loginUsuario"){ LoginUsuario (navHostController) }
+
+        composable("PantallaFormulario"){ Questionario (navHostController) }
     }
 }
