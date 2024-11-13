@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -163,7 +164,8 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
                 unfocusedBorderColor = Color.Gray,
                 focusedBorderColor = MoradoTextFields,
                 cursorColor = MoradoTextFields
-            )
+            ),
+            visualTransformation = PasswordVisualTransformation()//para q la contraseña salga oculta
         )
 
         // CONFIRMAR CONTRASEÑA
@@ -189,58 +191,27 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
                 if (password == confirmPassword && nombre.isNotEmpty() && email.isNotEmpty()) {
                     auth.createUserWithEmailAndPassword(email, password)//crea al usuario y deberia guardarlo en firebaseAUTH
 
+
+
                         //segun el resultado q nos ha dado el registro, es decir si se ha cumplido la condicion de los campos
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) { //si ha sido exitoso
 
-                                val user = hashMapOf(
-                                    "nombre" to nombre,
-                                    "email" to email,
-                                    "apellido" to apellidos
-                                )
+                                var user = auth.currentUser
+                                user?.let {
+                                    //parametros ordenados
+                                    val datosUser = User(uid = it.uid, nombre = nombre, email = email)
 
-
-                                val userID = task.result?.user?.uid //coger el valor aleatorio de fb para identificar al usuario
-                                if (userID != null) {
-                                    dbFirestore.collection("usuariosCRM").document(userID).set(user)
+                                    dbFirestore.collection("usuariosCRM").document(it.uid).set(datosUser)
                                         .addOnSuccessListener {
                                             // Éxito al guardar en Firestore
                                         }
                                         .addOnFailureListener {
                                             // Manejo de errores al guardar en Firestore
                                         }
-                                } else {
-                                    // Manejo de caso donde el userID es null
-                                    Log.e("Error", "El userID es null")
                                 }
-                                //val usuarioActual = auth.currentUser //pillamos al usuario
-
-//                                if (usuarioActual != null){
-//                                    //si el usuario pillado, si ha encontrado un usuario --> es distinto de null ===> EL USUARIO ESTÁ REGISTRADO Y DENTRO DE LA APP
-//
-//                                    //PARA ACCEDER AL *UID* DEL USUARIO
-//                                    val userId = it.uid
-//
-//                                    errorMessage = "usurio autenticado"
-//
-//                                }else{
-//
-//                                    //else ==> no hay usuario registrado o dentro de la aplicacion
-//                                    //Text(text = "Usuario no autenticado")
-//                                    errorMessage = "Error al crear el usuario"
-//                                }
 
 
-
-                                /*userId?.let {
-                                    dbFirestore.collection("usuarios").document(it).set(user)
-                                        .addOnSuccessListener {
-                                            // Éxito al guardar en Firestore
-                                        }
-                                        .addOnFailureListener {
-                                            // Manejo de errores al guardar en Firestore
-                                        }
-                                }*/
                             } else {
                                 // Manejo de errores al crear el usuario en Auth
                                 errorMessage = "usurio no autenticado"
