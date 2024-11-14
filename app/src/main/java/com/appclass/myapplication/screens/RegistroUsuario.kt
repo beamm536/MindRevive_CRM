@@ -2,6 +2,7 @@ package com.appclass.myapplication.screens
 
 import android.util.Log
 import android.widget.Space
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +21,7 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults.outlinedTextFieldColors
 import androidx.compose.material3.Icon
@@ -109,9 +111,10 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
     //para q funcione y no de error el txt dentro del btn
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    //variable pra la contraseña visible
+    //variable pra la contraseña visible   ||  y para mostrar un error en caso de q la la constraseña sea menor a 6 caracteres
     var passVisible by remember { mutableStateOf(false) } //q no vea al principio
     var passVisible2 by remember { mutableStateOf(false) }
+    var mostrarErrorNumCaracteres by remember { mutableStateOf(false) }
 
     //DECLARACION DE LAS BD A USAR
     var auth = FirebaseAuth.getInstance()
@@ -191,7 +194,11 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
             // CONTRASEÑA
             OutlinedTextField(
                 value = password,
-                onValueChange = { password = it },
+                onValueChange = {
+                                //comprobacion de que el parámetro contraseña tenga min 6 caract
+                                  password = it
+                                  mostrarErrorNumCaracteres = password.length < 6
+                                },
                 label = { Text("Contraseña") },
                 shape = RoundedCornerShape(16.dp),
                 colors = outlinedTextFieldColors(
@@ -214,8 +221,24 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
                             contentDescription = if (passVisible) "Ocultar contraseña" else "Mostrar contraseña"
                         )
                     }
-                }
+                },
+                isError = mostrarErrorNumCaracteres //el campo del field lo va mostrar en rojo si no se cumple
             )
+
+            if (mostrarErrorNumCaracteres) {
+                DropdownMenu(
+                    expanded = mostrarErrorNumCaracteres,
+                    onDismissRequest = { mostrarErrorNumCaracteres = false },
+                    modifier = Modifier.background(Color.White)
+                ) {
+                    Text(
+                        text = "La contraseña debe tener al menos 6 caracteres",
+                        color = Color.Red,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+            }
+
         }
 
         item {
