@@ -2,6 +2,7 @@ package com.appclass.myapplication.screens
 
 import android.util.Log
 import android.widget.Space
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -117,10 +119,12 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
     var passVisible2 by remember { mutableStateOf(false) }
     var mostrarErrorNumCaracteres by remember { mutableStateOf(false) }
 
+    //variable Toast
+    val contextoApp = LocalContext.current
+
     //DECLARACION DE LAS BD A USAR
     var auth = FirebaseAuth.getInstance()
     var dbFirestore = FirebaseFirestore.getInstance()
-
 
 
     //CAMPOS FORMULARIO
@@ -270,6 +274,14 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
             // BTN CREAR CUENTA
             Button(
                 onClick = {
+
+                    //TOAST PARA MOSTRAR MENSAJE DE Q EL USUARIO SE HA REGISTRADO --> explicado en apuntesRegistro
+                    Toast.makeText(
+                        contextoApp,
+                        "El usuario se ha registrado correctamente",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
                     OnclickBtnRegistrar(
                         nombre = nombre,
                         apellidos = apellidos,
