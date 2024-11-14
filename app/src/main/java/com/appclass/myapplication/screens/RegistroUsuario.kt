@@ -103,7 +103,7 @@ fun RegistroUsuario(navController: NavController){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CamposRegistroUsuario(modifier: Modifier = Modifier){
+fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Modifier){
 
     //DECLARACION DE LAS VARIABLES
     var nombre by remember { mutableStateOf("") }
@@ -116,10 +116,13 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
     //para q funcione y no de error el txt dentro del btn
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    //variable pra la contraseña visible   ||  y para mostrar un error en caso de q la la constraseña sea menor a 6 caracteres
+    //variable pra la contraseña visible   ||  y para mostrar un error en caso de q la la constraseña sea menor a 6 caracteres  || y para q sean iguales
     var passVisible by remember { mutableStateOf(false) } //q no vea al principio
     var passVisible2 by remember { mutableStateOf(false) }
     var mostrarErrorNumCaracteres by remember { mutableStateOf(false) }
+    var mostrarErrorNoCoinciden by remember { mutableStateOf(false) }
+
+
 
     //variable Toast
     val contextoApp = LocalContext.current
@@ -205,6 +208,7 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
                                 //comprobacion de que el parámetro contraseña tenga min 6 caract
                                   password = it
                                   mostrarErrorNumCaracteres = password.length < 6
+                                  mostrarErrorNoCoinciden = password != confirmPassword
                                 },
                 label = { Text("Contraseña") },
                 shape = RoundedCornerShape(16.dp),
@@ -229,10 +233,13 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
                         )
                     }
                 },
-                isError = mostrarErrorNumCaracteres //el campo del field lo va mostrar en rojo si no se cumple
+                isError = mostrarErrorNumCaracteres  && mostrarErrorNoCoinciden
+                //el campo del field lo va mostrar en rojo si no se cumple
+                //y si las contraseñas no son iguales tmb en rojo
             )
 
-            CuadroDialogoErrorPassword(mostrarErrorNumCaracteres)
+            ErrorPasswordNumCaracteres(mostrarErrorNumCaracteres)
+            ErrPasswordNoCoinciden(mostrarErrorNoCoinciden)
 
         }
 
@@ -243,6 +250,7 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
                 onValueChange = {
                                   confirmPassword = it
                                   mostrarErrorNumCaracteres = password.length < 6
+                                  mostrarErrorNoCoinciden = password != confirmPassword
                                 },
                 label = { Text("Confirmar Contraseña") },
                 shape = RoundedCornerShape(16.dp),
@@ -265,10 +273,14 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
                         )
                     }
                 },
-                isError = mostrarErrorNumCaracteres //el campo del field lo va mostrar en rojo si no se cumple
+                isError = mostrarErrorNumCaracteres  && mostrarErrorNoCoinciden
+                        //el campo del field lo va mostrar en rojo si no se cumple
+                        //y si las contraseñas no son iguales tmb en rojo
+
             )
 
-            CuadroDialogoErrorPassword(mostrarErrorNumCaracteres)
+            ErrorPasswordNumCaracteres(mostrarErrorNumCaracteres)
+            ErrPasswordNoCoinciden(mostrarErrorNoCoinciden)
         }
 
 
@@ -283,6 +295,9 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
                         "El usuario se ha registrado correctamente",
                         Toast.LENGTH_SHORT
                     ).show()
+
+                    //REDIRECCION DENTRO DE LA APP
+                    navController.navigate("pantallaInicio")
 
                     OnclickBtnRegistrar(
                         nombre = nombre,
@@ -356,7 +371,7 @@ fun OnclickBtnRegistrar(
 }
 
 @Composable
-fun CuadroDialogoErrorPassword(
+fun ErrorPasswordNumCaracteres(
     mostrarErrorNumCaracteres: Boolean
 ){
 
@@ -368,6 +383,24 @@ fun CuadroDialogoErrorPassword(
         ) {
             Text(
                 text = "La contraseña debe tener al menos 6 caracteres",
+                color = Color.Red
+            )
+        }
+    }
+}
+
+@Composable
+fun ErrPasswordNoCoinciden(
+    mostrarErrorNoCoinciden: Boolean
+){
+    if (mostrarErrorNoCoinciden) {
+        Box(
+            modifier = Modifier
+                .background(Color.White)
+                .padding(8.dp)
+        ) {
+            Text(
+                text = "Las contraseñas no coinciden",
                 color = Color.Red
             )
         }
@@ -386,6 +419,6 @@ fun Final(navController: NavController, modifier: Modifier = Modifier){
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Spacer(modifier = Modifier.size(100.dp))
-        CamposRegistroUsuario(modifier)
+        CamposRegistroUsuario( navController,modifier)
     }
 }
