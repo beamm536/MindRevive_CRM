@@ -4,6 +4,7 @@ import android.util.Log
 import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -225,19 +226,7 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
                 isError = mostrarErrorNumCaracteres //el campo del field lo va mostrar en rojo si no se cumple
             )
 
-            if (mostrarErrorNumCaracteres) {
-                DropdownMenu(
-                    expanded = mostrarErrorNumCaracteres,
-                    onDismissRequest = { mostrarErrorNumCaracteres = false },
-                    modifier = Modifier.background(Color.White)
-                ) {
-                    Text(
-                        text = "La contraseña debe tener al menos 6 caracteres",
-                        color = Color.Red,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
-            }
+            CuadroDialogoErrorPassword(mostrarErrorNumCaracteres)
 
         }
 
@@ -245,7 +234,10 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
             // CONFIRMAR CONTRASEÑA
             OutlinedTextField(
                 value = confirmPassword,
-                onValueChange = { confirmPassword = it },
+                onValueChange = {
+                                  confirmPassword = it
+                                  mostrarErrorNumCaracteres = password.length < 6
+                                },
                 label = { Text("Confirmar Contraseña") },
                 shape = RoundedCornerShape(16.dp),
                 colors = outlinedTextFieldColors(
@@ -266,8 +258,11 @@ fun CamposRegistroUsuario(modifier: Modifier = Modifier){
                             contentDescription = if (passVisible2) "Ocultar contraseña" else "Mostrar contraseña"
                         )
                     }
-                }
+                },
+                isError = mostrarErrorNumCaracteres //el campo del field lo va mostrar en rojo si no se cumple
             )
+
+            CuadroDialogoErrorPassword(mostrarErrorNumCaracteres)
         }
 
 
@@ -343,6 +338,25 @@ fun OnclickBtnRegistrar(
     } else {
         // Mostrar mensaje de error si las contraseñas no coinciden o si los campos están vacíos
         onError ("Las contraseñas no coinciden o hay campos vacíos")
+    }
+}
+
+@Composable
+fun CuadroDialogoErrorPassword(
+    mostrarErrorNumCaracteres: Boolean
+){
+
+    if (mostrarErrorNumCaracteres) {
+        Box(
+            modifier = Modifier
+                .background(Color.White)
+                .padding(8.dp)
+        ) {
+            Text(
+                text = "La contraseña debe tener al menos 6 caracteres",
+                color = Color.Red
+            )
+        }
     }
 }
 
