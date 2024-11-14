@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.appclass.myapplication"
-    compileSdk = 34
+    compileSdk = 35 //34
 
     defaultConfig {
         applicationId = "com.appclass.myapplication"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35 //34
         versionCode = 1
         versionName = "1.0"
 
@@ -63,6 +63,10 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.androidx.constraintlayout.compose.android)
+    implementation(libs.androidx.espresso.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
