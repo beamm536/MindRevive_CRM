@@ -66,7 +66,9 @@ fun RegistroUsuario(navController: NavController){
                 ),*/
                 title ={ /*titulo vacio*/ },
                 navigationIcon = {
-                    IconButton(onClick = { /* todo */ }) {
+                    IconButton(onClick = {
+                        navController.navigate("InicioAppCRM")
+                    }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "ArrowBack"
