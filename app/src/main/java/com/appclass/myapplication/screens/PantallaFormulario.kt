@@ -204,29 +204,6 @@ fun FormularioInput(navController: NavController) {
         }
 
 
-
-        /*
-                        item {
-                            Button(onClick = {
-                                EnviarFormulario(
-                                    logros, cuidadoPersonal, emociones, pensamientosNegativos, nivelAnsiedad,
-                                    selectedSueno, agradecimientos, intensidadAutocritica, expectativaManana,
-                                    otrosComentarios, notaGlobal
-                                )
-                            }) {
-                                Text("Enviar formulario")
-                            }
-                        }
-        item {
-            Button(onClick = {
-                EnviarFormulario(
-                    trabajo, descanso, ejercicio, social, hobbies
-                )
-            }) {
-                Text("Enviar formulario")
-            }
-        }*/
-
     }
 }
 @Composable
