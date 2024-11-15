@@ -4,6 +4,7 @@ import android.util.Log
 import android.widget.Space
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,6 +47,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.Visibility
 import androidx.navigation.NavController
 import com.appclass.myapplication.ui.theme.MarronBtns
@@ -317,6 +319,17 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
             ) {
                 Text("Create an account")
             }
+        }
+
+        item{
+            Text(
+                text = "Ya tengo cuenta, Log-in",
+                color = Color.Blue,
+                fontSize = 18.sp,
+                modifier = Modifier.clickable {
+                    navController.navigate("loginUsuariow")
+                }
+            )
         }
     }
 }

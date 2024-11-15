@@ -22,10 +22,14 @@ import com.appclass.myapplication.screens.Questionario
 @Composable
 fun NavigationWrapper(navHostController: NavHostController) {
 <<<<<<< HEAD
+<<<<<<< HEAD
     NavHost(navController = navHostController, startDestination = "inicioAppCRM") {
 =======
     NavHost(navController = navHostController, startDestination = "PantallaFormulario") {
 >>>>>>> alba
+=======
+    NavHost(navController = navHostController, startDestination = "inicioAppCRM") {
+>>>>>>> beatr2
         composable("pantallaInicio") { PantallaInicio(navHostController) }
 
         composable("home") { BottomNavigationBarComponent(navHostController) }
