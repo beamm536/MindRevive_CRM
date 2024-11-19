@@ -112,7 +112,7 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
     //DECLARACION DE LAS VARIABLES
     var nombre by remember { mutableStateOf("") }
     var apellidos by remember { mutableStateOf("") }
-    var edad by remember { mutableStateOf(0) }//NO PONERLO CON COMILLAS SI ES UN INTTTT
+    var edad by remember { mutableStateOf("") }//NO PONERLO CON COMILLAS SI ES UN INTTTT
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
@@ -177,8 +177,8 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
         item {
             // EDAD
             OutlinedTextField(
-                value = nombre,
-                onValueChange = { nombre = it },
+                value = edad,
+                onValueChange = { edad = it },
                 label = { Text("Edad") },
                 shape = RoundedCornerShape(16.dp),
                 colors = outlinedTextFieldColors(
@@ -187,6 +187,7 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
                     cursorColor = MoradoTextFields
                 )
             )
+//Patterns.EMAIL_ADDRESS.matcher(mail).matches()
         }
 
         item {
@@ -334,11 +335,13 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
     }
 }
 
+
+
 //ESTA FUNCION NO ES COMPOSABLE!!
 fun OnclickBtnRegistrar(
     nombre: String,
     apellidos: String,
-    edad: Int,
+    edad: String,
     email: String,
     password: String,
     confirmPassword: String,
