@@ -31,7 +31,7 @@ import java.util.UUID
 @Composable
 fun NavigationWrapper(navHostController: NavHostController) {
 
-    NavHost(navController = navHostController, startDestination = "PantallaFormulario") {
+    NavHost(navController = navHostController, startDestination = "pantallaGraficos") {
 /*
         composable("pantallaInicio") { PantallaInicio(navHostController) }
 
