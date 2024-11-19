@@ -120,21 +120,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit){
         ) {
             Text("Registrar")
         }
-
-        //Línea horizontal, como el <hr> en html
-        Divider(
-            color = Color.Gray,  // Color de la línea
-            thickness = 1.dp     // Grosor de la línea
-        )
-        Text(
-            text = "OR"
-        )
-
-        //quedaria bonito poner el "OR" entre dos dividers :)
-
-
-        //llamada al metodo del btn de google, está mas abajo
-        BtnGoogle(modifier = Modifier)
+        
     }
 }
 
@@ -174,32 +160,7 @@ fun registerWithEmailAndPassword(email: String, password: String, onSuccess: () 
 
 }
 
-@Composable
-fun BtnGoogle(modifier: Modifier = Modifier){
-    Button(
-        onClick = {/*todo*/},
-        modifier = Modifier
-            .padding(8.dp)
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.google),
-            contentDescription = "logo google",
-            modifier = Modifier
-                .clip(CircleShape) //esto lo q hace es recortar las esquinas, en este caso en redondo :)
 
-                //tamaño de la imagen
-                .width(30.dp)
-                .height(30.dp)
-
-        )
-        Text(
-            text = "Iniciar Sesión con Google",
-            color = Color.White,
-            modifier = Modifier
-                .padding(start = 15.dp)
-        )
-    }
-}
 
 @Composable
 fun MainScreen(){
