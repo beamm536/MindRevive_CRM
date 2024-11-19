@@ -42,6 +42,8 @@ import androidx.compose.ui.text.font.FontWeight
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.UUID
+import com.appclass.myapplication.componentes.BottomNavigationBarComponent
+import java.time.LocalDate
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -63,7 +65,8 @@ fun Questionario(navController: NavController) {
                     containerColor = Color(0xFF0277BD)
                 )
             )
-        }
+        },
+                bottomBar = { BottomNavigationBarComponent(navController = navController) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -108,7 +111,7 @@ fun FormularioInput(navController: NavController) {
         }
 
         item {
-            SliderWithLabel3(label = "Motivación", value = motivacion.value, onValueChange = { motivacion.value = it })
+            SliderWithLabel(label = "Motivación", value = motivacion.value, onValueChange = { motivacion.value = it })
         }
 
         item {
@@ -176,7 +179,7 @@ fun FormularioInput(navController: NavController) {
         }
 
         item {
-            SliderWithLabel3(label = "Nota global", value = notaGlobal.value, onValueChange = { notaGlobal.value = it })
+            SliderWithLabel2(label = "Nota global", value = notaGlobal.value, onValueChange = { notaGlobal.value = it })
         }
 
         item {
@@ -515,4 +518,6 @@ fun EnviarFormularioButton(
     }) {
         Text("Enviar")
     }
+
+
 }
