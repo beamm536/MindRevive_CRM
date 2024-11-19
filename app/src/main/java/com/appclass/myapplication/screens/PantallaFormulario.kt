@@ -108,27 +108,27 @@ fun FormularioInput(navController: NavController) {
         }
 
         item {
-            SliderWithLabel2(label = "Motivación", value = motivacion.value, onValueChange = { motivacion.value = it })
+            SliderWithLabel3(label = "Motivación", value = motivacion.value, onValueChange = { motivacion.value = it })
         }
 
         item {
-            SliderWithLabel(label = "Trabajo", value = trabajo.value, onValueChange = { trabajo.value = it })
+            SliderWithLabel3(label = "Trabajo", value = trabajo.value, onValueChange = { trabajo.value = it })
         }
 
         item {
-            SliderWithLabel(label = "Descanso", value = descanso.value, onValueChange = { descanso.value = it })
+            SliderWithLabel3(label = "Descanso", value = descanso.value, onValueChange = { descanso.value = it })
         }
 
         item {
-            SliderWithLabel(label = "Ejercicio", value = ejercicio.value, onValueChange = { ejercicio.value = it })
+            SliderWithLabel3(label = "Ejercicio", value = ejercicio.value, onValueChange = { ejercicio.value = it })
         }
 
         item {
-            SliderWithLabel(label = "Social", value = social.value, onValueChange = { social.value = it })
+            SliderWithLabel3(label = "Social", value = social.value, onValueChange = { social.value = it })
         }
 
         item {
-            SliderWithLabel(label = "Hobbies", value = hobbies.value, onValueChange = { hobbies.value = it })
+            SliderWithLabel3(label = "Hobbies", value = hobbies.value, onValueChange = { hobbies.value = it })
         }
 
         item {
@@ -152,7 +152,7 @@ fun FormularioInput(navController: NavController) {
         }
 
         item {
-            SliderWithLabel2(label = "Nivel de ansiedad", value = nivelAnsiedad.value, onValueChange = { nivelAnsiedad.value = it })
+            SliderWithLabel(label = "Nivel de ansiedad", value = nivelAnsiedad.value, onValueChange = { nivelAnsiedad.value = it })
         }
 
         item {
@@ -164,7 +164,7 @@ fun FormularioInput(navController: NavController) {
         }
 
         item {
-            SliderWithLabel2(label = "Intensidad de autocritica", value = intensidadAutocritica.value, onValueChange = { intensidadAutocritica.value = it })
+            SliderWithLabel(label = "Intensidad de autocritica", value = intensidadAutocritica.value, onValueChange = { intensidadAutocritica.value = it })
         }
 
         item {
@@ -203,29 +203,6 @@ fun FormularioInput(navController: NavController) {
             )
         }
 
-
-
-        /*
-                        item {
-                            Button(onClick = {
-                                EnviarFormulario(
-                                    logros, cuidadoPersonal, emociones, pensamientosNegativos, nivelAnsiedad,
-                                    selectedSueno, agradecimientos, intensidadAutocritica, expectativaManana,
-                                    otrosComentarios, notaGlobal
-                                )
-                            }) {
-                                Text("Enviar formulario")
-                            }
-                        }
-        item {
-            Button(onClick = {
-                EnviarFormulario(
-                    trabajo, descanso, ejercicio, social, hobbies
-                )
-            }) {
-                Text("Enviar formulario")
-            }
-        }*/
 
     }
 }
@@ -318,47 +295,36 @@ fun SliderWithLabel3(label: String, value: Int, onValueChange: (Int) -> Unit) {
 fun WeatherSelection(selectedWeather: MutableState<String>) {
     Log.d("Formulario", "Opción de clima seleccionada: ${selectedWeather.value}")
 
-    Text("Selecciona las condiciones meteorológicas:", style = MaterialTheme.typography.bodyMedium)
+    Text(
+        "Selecciona las condiciones meteorológicas:",
+        style = MaterialTheme.typography.bodyMedium
+    )
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Button for Sunny weather
-        WeatherButton(
-            weatherType = "Soleado",
-            selectedWeather = selectedWeather
-        )
+        // Primera fila con tres botones
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            WeatherButton(weatherType = "Soleado", selectedWeather = selectedWeather)
+            WeatherButton(weatherType = "Nublado", selectedWeather = selectedWeather)
+            WeatherButton(weatherType = "Lluvia", selectedWeather = selectedWeather)
+        }
 
-        // Button for Cloudy weather
-        WeatherButton(
-            weatherType = "Nublado",
-            selectedWeather = selectedWeather
-        )
-
-        // Button for Rainy weather
-        WeatherButton(
-            weatherType = "Lluvia",
-            selectedWeather = selectedWeather
-        )
-
-        // Button for Stormy weather
-        WeatherButton(
-            weatherType = "Tormenta",
-            selectedWeather = selectedWeather
-        )
-
-        // Button for Foggy weather
-        WeatherButton(
-            weatherType = "Niebla",
-            selectedWeather = selectedWeather
-        )
-
-        // Button for Snowy weather
-        WeatherButton(
-            weatherType = "Nieve",
-            selectedWeather = selectedWeather
-        )
+        // Segunda fila con tres botones
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            WeatherButton(weatherType = "Tormenta", selectedWeather = selectedWeather)
+            WeatherButton(weatherType = "Niebla", selectedWeather = selectedWeather)
+            WeatherButton(weatherType = "Nieve", selectedWeather = selectedWeather)
+        }
     }
 }
 
@@ -370,7 +336,7 @@ fun WeatherButton(weatherType: String, selectedWeather: MutableState<String>) {
             Log.d("Formulario", "Valor de clima actualizado: ${selectedWeather.value}")
         },
         modifier = Modifier
-            .fillMaxWidth()
+
             .border(
                 width = 2.dp,
                 color = if (selectedWeather.value == weatherType) Color.Blue else Color.Gray,

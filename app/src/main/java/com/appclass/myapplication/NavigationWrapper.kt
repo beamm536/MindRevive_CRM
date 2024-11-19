@@ -21,7 +21,9 @@ import com.appclass.myapplication.screens.Questionario
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationWrapper(navHostController: NavHostController) {
+
     NavHost(navController = navHostController, startDestination = "inicioAppCRM") {
+
         composable("pantallaInicio") { PantallaInicio(navHostController) }
 
         composable("home") { BottomNavigationBarComponent(navHostController) }
