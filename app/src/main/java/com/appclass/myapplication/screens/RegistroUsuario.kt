@@ -328,7 +328,7 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
                 color = Color.Blue,
                 fontSize = 18.sp,
                 modifier = Modifier.clickable {
-                    navController.navigate("loginUsuariow")
+                    navController.navigate("loginUsuario")
                 }
             )
         }
