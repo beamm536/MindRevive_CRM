@@ -9,14 +9,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.appclass.myapplication.screens.ButtonAddForms
 import com.appclass.myapplication.screens.Formulario
-/*
+
 import com.appclass.myapplication.componentes.BottomNavigationBarComponent
 import com.appclass.myapplication.screens.CalendarioApp
 import com.appclass.myapplication.screens.InicioAppCRM
 import com.appclass.myapplication.screens.PantallaInicio
 //import com.appclass.pruebasautentificacion.screens.LoginUsuario
 import com.appclass.myapplication.screens.RegistroUsuario
-import com.appclass.myapplication.screens.LoginUsuario*/
+import com.appclass.myapplication.screens.LoginUsuario
 import com.appclass.myapplication.screens.PantallaGraficos
 import com.appclass.myapplication.screens.Questionario
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,8 +31,8 @@ import java.util.UUID
 @Composable
 fun NavigationWrapper(navHostController: NavHostController) {
 
-    NavHost(navController = navHostController, startDestination = "pantallaGraficos") {
-/*
+    NavHost(navController = navHostController, startDestination = "inicioAppCRM") {
+
         composable("pantallaInicio") { PantallaInicio(navHostController) }
 
         composable("home") { BottomNavigationBarComponent(navHostController) }
@@ -45,7 +45,7 @@ fun NavigationWrapper(navHostController: NavHostController) {
 
         composable("calendarApp"){ CalendarioApp (navHostController) }
 
-*/
+
         composable("PantallaFormulario"){ Questionario (navHostController) }
         composable("pantallaGraficos") { PantallaGraficos(navHostController) }
         //para añadir los 29 días antes creo
