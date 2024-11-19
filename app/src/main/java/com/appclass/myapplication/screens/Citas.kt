@@ -4,5 +4,6 @@ data class Citas(
     var id: String = "",
     val nombre: String = "",
     val medico: String = "",
-    val dia: String = ""
+    val dia: String = "",
+    val hora: String = ""
 )

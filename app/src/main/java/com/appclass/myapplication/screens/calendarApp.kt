@@ -55,6 +55,7 @@ fun CalendarioPantalla(navHostController: NavHostController) {
     val db = FirebaseFirestore.getInstance() // Instancia de Firestore
     val coleccion = "citas" // Nombre de la colección de citas
     var citas by remember { mutableStateOf<List<Citas>>(emptyList()) } // Lista para almacenar las citas
+    var diasConCitas by remember { mutableStateOf<Set<Int>>(emptySet()) } // Conjunto para almacenar los días con citas
 
     // Recuperar todas las citas del mes
     LaunchedEffect(mesActual) {
@@ -68,6 +69,8 @@ fun CalendarioPantalla(navHostController: NavHostController) {
                     doc.toObject(Citas::class.java)
                 }
                 citas = listaCitas.sortedBy { it.dia.toInt() } // Ordenamos las citas por día
+                // Guardamos los días que tienen citas
+                diasConCitas = listaCitas.map { it.dia.toInt() }.toSet()
             }
             .addOnFailureListener {
                 // Manejo de error si no se pueden cargar las citas
@@ -95,13 +98,12 @@ fun CalendarioPantalla(navHostController: NavHostController) {
             for (dia in 1..diasMes) {
                 item {
                     // Para cada día, mostramos una celda que al hacer clic lleva a la pantalla del día
-                    DiaCasilla (dia = dia, diaActual = dia == LocalDate.now().dayOfMonth) {
+                    DiaCasilla(dia = dia, diaActual = dia == LocalDate.now().dayOfMonth, tieneCita = diasConCitas.contains(dia)) {
                         navHostController.navigate("day/$dia") // Navegar a la pantalla de detalles del día
                     }
                 }
             }
         }
-
 
         Text(text = "Citas del Mes", style = MaterialTheme.typography.headlineMedium)
 
@@ -157,6 +159,7 @@ fun CalendarioPantalla(navHostController: NavHostController) {
                         // Otros textos en la columna
                         Text(text = "Tipo de Cita: ${cita.nombre}", style = MaterialTheme.typography.bodyLarge)
                         Text(text = "Médico: ${cita.medico}", style = MaterialTheme.typography.bodyLarge)
+                        Text(text = "Hora: ${cita.hora}", style = MaterialTheme.typography.bodyLarge)
                     }
                 }
             }
@@ -165,8 +168,9 @@ fun CalendarioPantalla(navHostController: NavHostController) {
 }
 
 // Componente que representa una celda del día en el calendario.
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DiaCasilla(dia: Int, diaActual: Boolean, onClick: () -> Unit) {
+fun DiaCasilla(dia: Int, diaActual: Boolean, tieneCita: Boolean, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .padding(8.dp)
@@ -191,17 +195,27 @@ fun DiaCasilla(dia: Int, diaActual: Boolean, onClick: () -> Unit) {
                 color = if (diaActual) Color.White else Color.Black
             )
         }
+
+        // Si el día tiene citas, se muestra un punto rojo debajo del número del día
+        if (tieneCita) {
+            Box(
+                modifier = Modifier
+                    .size(8.dp)
+                    .background(Color.Red, CircleShape)
+                    .align(Alignment.CenterHorizontally)
+            )
+        }
     }
 }
 
 // Pantalla que muestra las citas de un día específico, obteniendo los datos de Firestore.
 @Composable
 fun DiaCitas(dia: Int) {
-
     val db = FirebaseFirestore.getInstance()
     val coleccion = "citas"
     var nombre by remember { mutableStateOf("") }
     var medico by remember { mutableStateOf("") }
+    var hora by remember { mutableStateOf("") }
     var mensaje by remember { mutableStateOf("") }
     var citas by remember { mutableStateOf<List<Citas>>(emptyList()) }
     var editada by remember { mutableStateOf(false) }
@@ -238,11 +252,10 @@ fun DiaCitas(dia: Int) {
             label = { Text("Nombre del Médico") }
         )
 
-        // Datos que se enviarán a Firestore
-        val datos = hashMapOf(
-            "nombre" to nombre,
-            "medico" to medico,
-            "dia" to dia.toString()
+        OutlinedTextField(
+            value = hora,
+            onValueChange = { hora = it },
+            label = { Text("Hora (HH:mm)") }
         )
 
         Spacer(modifier = Modifier.size(5.dp))
@@ -250,6 +263,36 @@ fun DiaCitas(dia: Int) {
         // Botón para añadir o editar cita
         Button(
             onClick = {
+                val horaNueva = try {
+                    hora.split(":").let { parts ->
+                        parts[0].toInt() * 60 + parts[1].toInt() // Convertimos hora y minutos a minutos totales
+                    }
+                } catch (e: Exception) {
+                    mensaje = "Formato de hora no válido. Usa HH:mm"
+                    return@Button
+                }
+
+                val conflicto = citas.any { cita ->
+                    val horaExistente = cita.hora.split(":").let { parts ->
+                        parts[0].toInt() * 60 + parts[1].toInt()
+                    }
+                    val diferencia = kotlin.math.abs(horaNueva - horaExistente)
+                    diferencia < 60 // Conflicto si la diferencia es menor a una hora
+                }
+
+                if (conflicto) {
+                    mensaje = "Conflicto de horarios: debe haber al menos una hora entre citas."
+                    return@Button
+                }
+
+                // Datos que se enviarán a Firestore
+                val datos = hashMapOf(
+                    "nombre" to nombre,
+                    "medico" to medico,
+                    "dia" to dia.toString(),
+                    "hora" to hora
+                )
+
                 if (editada && editandoCitaId != null) {
                     // Modo edición: actualizar cita existente
                     db.collection(coleccion)
@@ -261,6 +304,7 @@ fun DiaCitas(dia: Int) {
                             editandoCitaId = null
                             nombre = ""
                             medico = ""
+                            hora = ""
                             cargarCitas(dia, db, coleccion) { listaCitas ->
                                 citas = listaCitas
                             }
@@ -277,12 +321,12 @@ fun DiaCitas(dia: Int) {
                             mensaje = "Cita guardada correctamente"
                             nombre = ""
                             medico = ""
+                            hora = ""
                             cargarCitas(dia, db, coleccion) { listaCitas ->
                                 citas = listaCitas
                             }
                         }
                         .addOnFailureListener {
-                            // Mensaje de error si no se pudo guardar la cita
                             mensaje = "No se ha podido guardar la cita correctamente"
                         }
                 }
@@ -290,53 +334,52 @@ fun DiaCitas(dia: Int) {
             colors = ButtonDefaults.buttonColors(containerColor = Color.Magenta),
             border = BorderStroke(1.dp, Color.Black)
         ) {
-            // Cambia el texto del botón según si estamos en modo edición o creación
             Text(text = if (editada) "Actualizar Cita" else "Añadir Cita")
         }
 
         Spacer(modifier = Modifier.size(8.dp))
-        Text(text = mensaje) // Muestra el mensaje de éxito o error
+        Text(text = mensaje)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Muestra las citas del día en tarjetas. Cada tarjeta representa una cita.
+        // Mostrar citas del día
         citas.forEach { cita ->
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
                     .clickable {
-                        // Activa el modo edición cuando hacemos clic en una tarjeta de cita
                         editada = true
                         editandoCitaId = cita.id
                         nombre = cita.nombre
                         medico = cita.medico
+                        hora = cita.hora
                     },
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    // Texto que muestra el tipo de cita y el nombre del médico
                     Text(text = "Tipo de Cita: ${cita.nombre}", style = MaterialTheme.typography.bodyLarge)
                     Text(text = "Médico: ${cita.medico}", style = MaterialTheme.typography.bodyLarge)
+                    Text(text = "Hora: ${cita.hora}", style = MaterialTheme.typography.bodyLarge)
                 }
             }
         }
     }
 }
 
-// Función para cargar las citas del día desde Firestore
-private fun cargarCitas(dia: Int, db: FirebaseFirestore, coleccion: String, onCitasLoaded: (List<Citas>) -> Unit) {
+// Función que carga las citas de un día específico desde Firestore
+fun cargarCitas(dia: Int, db: FirebaseFirestore, coleccion: String, onCitasLoaded: (List<Citas>) -> Unit) {
     db.collection(coleccion)
-        .whereEqualTo("dia", dia.toString()) // Filtra citas para el día específico
+        .whereEqualTo("dia", dia.toString()) // Cargar solo las citas de este día
         .get()
         .addOnSuccessListener { documents ->
-            // Convierte documentos en objetos `Citas` y asigna sus IDs
-            val listaCitas = documents.mapNotNull { doc ->
-                val cita = doc.toObject(Citas::class.java)
-                cita.id = doc.id // Guarda el ID del documento en el objeto `Citas`
-                cita
+            val citas = documents.mapNotNull { doc ->
+                doc.toObject(Citas::class.java)
             }
-            onCitasLoaded(listaCitas) // Llama a `onCitasLoaded` con la lista de citas
+            onCitasLoaded(citas)
+        }
+        .addOnFailureListener {
+            // Manejo de errores si no se pueden cargar las citas
         }
 }
 
