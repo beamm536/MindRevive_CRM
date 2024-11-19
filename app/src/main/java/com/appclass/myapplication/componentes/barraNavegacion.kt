@@ -10,11 +10,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
-fun BottomNavigationBarComponent(navController: NavHostController) {
+fun BottomNavigationBarComponent(navController: NavController) {
     // Define los elementos de navegación aquí para poder reutilizar el componente
     val items = listOf("home", "message", "form")
     val selectedRoute = navController.currentBackStackEntryAsState().value?.destination?.route
