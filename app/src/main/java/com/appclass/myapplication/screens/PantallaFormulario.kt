@@ -316,7 +316,7 @@ fun WeatherSelection(selectedWeather: MutableState<String>) {
         ) {
             WeatherButton(weatherType = "Soleado", selectedWeather = selectedWeather)
             WeatherButton(weatherType = "Nublado", selectedWeather = selectedWeather)
-            WeatherButton(weatherType = "Lluvia", selectedWeather = selectedWeather)
+            WeatherButton(weatherType = "Lluvioso", selectedWeather = selectedWeather)
         }
 
         // Segunda fila con tres botones
@@ -324,9 +324,9 @@ fun WeatherSelection(selectedWeather: MutableState<String>) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            WeatherButton(weatherType = "Tormenta", selectedWeather = selectedWeather)
+            WeatherButton(weatherType = "Tormentoso", selectedWeather = selectedWeather)
             WeatherButton(weatherType = "Niebla", selectedWeather = selectedWeather)
-            WeatherButton(weatherType = "Nieve", selectedWeather = selectedWeather)
+            WeatherButton(weatherType = "Nevado", selectedWeather = selectedWeather)
         }
     }
 }

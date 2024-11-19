@@ -1,5 +1,5 @@
 package com.appclass.myapplication.screens
-
+/*
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -241,4 +241,4 @@ fun LlamadaFinal(navController: NavController, modifier: Modifier = Modifier){
         //redirigir al usuario a otra pantalla
         navController.navigate("pantallaInicio")
     })
-}
+}*/
