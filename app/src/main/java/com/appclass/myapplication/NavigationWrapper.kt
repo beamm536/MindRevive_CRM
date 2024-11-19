@@ -13,6 +13,7 @@ import com.appclass.myapplication.screens.PantallaInicio
 //import com.appclass.pruebasautentificacion.screens.LoginUsuario
 import com.appclass.myapplication.screens.RegistroUsuario
 import com.appclass.myapplication.screens.LoginUsuario
+import com.appclass.myapplication.screens.PantallaGraficos
 import com.appclass.myapplication.screens.Questionario
 
 //import com.appclass.pruebasautentificacion.screens.RegistroUsuario
@@ -22,7 +23,7 @@ import com.appclass.myapplication.screens.Questionario
 @Composable
 fun NavigationWrapper(navHostController: NavHostController) {
 
-    NavHost(navController = navHostController, startDestination = "inicioAppCRM") {
+    NavHost(navController = navHostController, startDestination = "pantallaGraficos") {
 
         composable("pantallaInicio") { PantallaInicio(navHostController) }
 
@@ -38,5 +39,5 @@ fun NavigationWrapper(navHostController: NavHostController) {
 
 
         composable("PantallaFormulario"){ Questionario (navHostController) }
-    }
-}
+        composable("pantallaGraficos") { PantallaGraficos(navHostController) }
+}}
