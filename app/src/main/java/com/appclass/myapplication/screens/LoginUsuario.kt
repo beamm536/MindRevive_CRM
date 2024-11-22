@@ -44,7 +44,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.appclass.myapplication.R
+//import com.appclass.myapplication.R
 import com.appclass.myapplication.ui.theme.MoradoTextFields
 //import com.appclass.pruebasautentificacion.R
 import com.google.firebase.Firebase
@@ -146,7 +146,7 @@ fun LoginScreen(navController: NavController, onLoginSuccess: () -> Unit){
         }
 
         //BOTON PARA EL REGISTRO DE UN USUARIO NUEVO
-        Button(
+        /*Button(
             onClick = {
                 registerWithEmailAndPassword(email, password,
                     {
@@ -161,7 +161,7 @@ fun LoginScreen(navController: NavController, onLoginSuccess: () -> Unit){
                 .padding(horizontal = 32.dp)
         ) {
             Text("Registrar")
-        }
+        }*/
 
     }
 }
@@ -197,25 +197,25 @@ fun loginWithEmailAndPassword(
 }
 
 /*funcion para crear un nuevo usuario y guardarlo en la BD*/
-fun registerWithEmailAndPassword(email: String, password: String, onSuccess: () -> Unit, onError: (String) -> Unit){
-
-    //aÃ±adimos la logica de -> si no estan vacios los campos, q me cree la cuentaa nueva
-    if(email.isNotEmpty() && password.isNotEmpty()){
-
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener{task-> //con esto sabemos si la cuenta se ha creado bien
-                if (task.isSuccessful){
-                    onSuccess()
-                }else{
-                    onError(task.exception?.message?:"Registration failed")
-                }
-            }
-    }else{
-        println("complete todos los campos")
-    }
-
-
-}
+//fun registerWithEmailAndPassword(email: String, password: String, onSuccess: () -> Unit, onError: (String) -> Unit){
+//
+//    //aÃ±adimos la logica de -> si no estan vacios los campos, q me cree la cuentaa nueva
+//    if(email.isNotEmpty() && password.isNotEmpty()){
+//
+//        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+//            .addOnCompleteListener{task-> //con esto sabemos si la cuenta se ha creado bien
+//                if (task.isSuccessful){
+//                    onSuccess()
+//                }else{
+//                    onError(task.exception?.message?:"Registration failed")
+//                }
+//            }
+//    }else{
+//        println("complete todos los campos")
+//    }
+//
+//
+//}
 
 
 
