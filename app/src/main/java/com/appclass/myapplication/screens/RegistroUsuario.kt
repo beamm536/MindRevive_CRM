@@ -114,6 +114,7 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
     var apellidos by remember { mutableStateOf("") }
     var edad by remember { mutableStateOf("") }//NO PONERLO CON COMILLAS SI ES UN INTTTT
     var email by remember { mutableStateOf("") }
+    var emailInvalido by remember { mutableStateOf(false) }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 
@@ -194,7 +195,10 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
             // EMAIL
             OutlinedTextField(
                 value = email,
-                onValueChange = { email = it },
+                onValueChange = {
+                    email = it
+                    emailInvalido = !ValidacionEmail(email)
+                },
                 label = { Text("Email") },
                 shape = RoundedCornerShape(16.dp),
                 colors = outlinedTextFieldColors(
@@ -202,8 +206,17 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
                     focusedBorderColor = MoradoTextFields,
                     cursorColor = MoradoTextFields
                 ),
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email)
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
+                isError = emailInvalido
             )
+
+            if (emailInvalido) {
+                Text(
+                    text = "El email debe contener '@' y terminar en 'gmail.com'",
+                    color = Color.Red,
+                    fontSize = 12.sp
+                )
+            }
         }
 
         item {
@@ -294,6 +307,11 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
             // BTN CREAR CUENTA
             Button(
                 onClick = {
+                    //mensajito para el email invalido
+                    if (emailInvalido) {
+                        Toast.makeText(contextoApp, "Email inválido", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
 
                     //TOAST PARA MOSTRAR MENSAJE DE Q EL USUARIO SE HA REGISTRADO --> explicado en apuntesRegistro
                     Toast.makeText(
@@ -424,6 +442,11 @@ fun ErrPasswordNoCoinciden(
             )
         }
     }
+}
+
+//para q no podamos registrar un email como si fuera un nombre por ejemplo
+fun ValidacionEmail(email:String): Boolean{ //va a devolver un boolean
+    return email.contains("@") && email.endsWith("gmail.com")
 }
 
 
