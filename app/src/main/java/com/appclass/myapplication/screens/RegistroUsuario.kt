@@ -210,7 +210,7 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
                 isError = emailInvalido
             )
 
-            if (emailInvalido) {
+            if (emailInvalido) {//mensajito en rojo por debajo del input
                 Text(
                     text = "El email debe contener '@' y terminar en 'gmail.com'",
                     color = Color.Red,
