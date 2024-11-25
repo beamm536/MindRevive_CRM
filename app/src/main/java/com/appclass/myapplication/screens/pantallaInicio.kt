@@ -38,7 +38,7 @@ fun PantallaInicio(navController: NavHostController) {
     val db = FirebaseFirestore.getInstance()
 
     // Estado para guardar los datos del usuario
-    val (userData, setUserData) = remember { mutableStateOf<Map<String, Any>?>(null) }
+    val (datosUser, setdatosUser) = remember { mutableStateOf<Map<String, Any>?>(null) }
     val (error, setError) = remember { mutableStateOf<String?>(null) }
 
     // Solo ejecuta la consulta si el usuario está autenticado
@@ -47,7 +47,7 @@ fun PantallaInicio(navController: NavHostController) {
             db.collection("usuariosCRM").document(uid).get()
                 .addOnSuccessListener { document ->
                     if (document.exists()) {
-                        setUserData(document.data) // Guardamos los datos en el estado
+                        setdatosUser(document.data) // Guardamos los datos en el estado
                     } else {
                         setError("No se encontraron datos para el usuario.")
                     }
@@ -68,16 +68,16 @@ fun PantallaInicio(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            if (userData != null) {
+            if (datosUser != null) {
                 // Mostrar los datos del usuario
-                Text("Bienvenido, ${userData["nombre"] ?: "Usuario"}", fontSize = 24.sp)
-                Text("Email: ${userData["email"] ?: "No disponible"}", fontSize = 16.sp)
-                Text("Edad: ${userData["edad"] ?: "No especificada"}", fontSize = 16.sp)
+                Text("Bienvenido, ${datosUser["nombre"] ?: "Usuario"}", fontSize = 24.sp)
+                Text("Email: ${datosUser["email"] ?: "No disponible"}", fontSize = 16.sp)
+                Text("Edad: ${datosUser["edad"] ?: "No especificada"}", fontSize = 16.sp)
             } else if (error != null) {
                 // Mostrar un mensaje de error si falla la consulta
                 Text("Error: $error", color = Color.Red, fontSize = 16.sp)
             } else {
-                // Mostrar un indicador de carga mientras se obtienen los datos
+                //mostrador de carga de los datos mientras esperamos, es una funcion propia de kotlin
                 CircularProgressIndicator()
             }
         }
