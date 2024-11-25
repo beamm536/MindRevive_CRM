@@ -20,6 +20,7 @@ import com.appclass.myapplication.screens.LoginUsuario
 >>>>>>> beatr2
 import com.appclass.myapplication.componentes.BottomNavigationBarComponent
 import com.appclass.myapplication.screens.CalendarioApp
+//import com.appclass.myapplication.screens.EntradaApp
 import com.appclass.myapplication.screens.InicioAppCRM
 import com.appclass.myapplication.screens.PantallaInicio
 //import com.appclass.pruebasautentificacion.screens.LoginUsuario

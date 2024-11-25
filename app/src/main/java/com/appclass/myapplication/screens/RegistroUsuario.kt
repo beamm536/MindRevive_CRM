@@ -384,14 +384,22 @@ fun OnclickBtnRegistrar(
                     var user = auth.currentUser
                     user?.let {
                         //parametros ordenados
-                        val datosUser = User(uid = it.uid, nombre = nombre, apellidos = apellidos ,edad = edad,email = email)
+                        val datosUser = User(
+                            uid = it.uid,
+                            nombre = nombre,
+                            apellidos = apellidos,
+                            edad = edad,
+                            email = email
+                        )
 
                         dbFirestore.collection("usuariosCRM").document(it.uid).set(datosUser)
                             .addOnSuccessListener {
                                 // Éxito al guardar en Firestore
+                                Log.d("Registro", "Usuario guardado exitosamente en Firestore")
                             }
                             .addOnFailureListener {
                                 // Manejo de errores al guardar en Firestore
+                                Log.e("Registro", "Error al guardar usuario en Firestore: ${it.message}")
                             }
                     }
 
