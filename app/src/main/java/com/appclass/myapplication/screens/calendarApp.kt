@@ -168,7 +168,6 @@ fun CalendarioPantalla(navHostController: NavHostController) {
 }
 
 // Componente que representa una celda del día en el calendario.
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DiaCasilla(dia: Int, diaActual: Boolean, tieneCita: Boolean, onClick: () -> Unit) {
     Column(
@@ -379,7 +378,6 @@ fun cargarCitas(dia: Int, db: FirebaseFirestore, coleccion: String, onCitasLoade
             onCitasLoaded(citas)
         }
         .addOnFailureListener {
-            // Manejo de errores si no se pueden cargar las citas
         }
 }
 
