@@ -19,6 +19,7 @@ import com.appclass.myapplication.screens.PantallaInicio
 import com.appclass.myapplication.screens.RegistroUsuario
 import com.appclass.myapplication.screens.LoginUsuario
 import com.appclass.myapplication.screens.PantallaGraficos
+import com.appclass.myapplication.screens.PantallaPerfil
 import com.appclass.myapplication.screens.Questionario
 import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDate
@@ -32,7 +33,7 @@ import java.util.UUID
 @Composable
 fun NavigationWrapper(navHostController: NavHostController) {
 
-    NavHost(navController = navHostController, startDestination = "pantallaInicio") {
+    NavHost(navController = navHostController, startDestination = "inicioAppCRM") {
 
         composable("pantallaInicio") { PantallaInicio(navHostController) }
 
@@ -41,7 +42,7 @@ fun NavigationWrapper(navHostController: NavHostController) {
         composable("home") { PantallaInicio(navHostController) }
         composable("citas") { CalendarioApp(navHostController) }
         composable("formulario") { Questionario(navHostController) }
-        composable("perfil"){ PantallaGraficos(navHostController)}
+        composable("perfil"){ PantallaPerfil(navHostController) }
 
         composable("inicioAppCRM"){ InicioAppCRM (navHostController)}
         composable("registroUsuario"){ RegistroUsuario (navHostController) }
@@ -49,9 +50,10 @@ fun NavigationWrapper(navHostController: NavHostController) {
 
         composable("calendarApp"){ CalendarioApp (navHostController) }
 
-
         composable("PantallaFormulario"){ Questionario (navHostController) }
         composable("pantallaGraficos") { PantallaGraficos(navHostController) }
         //para añadir los 29 días antes creo
         composable("buttonAddForms") { ButtonAddForms(navHostController) }
+
+        composable("pantallaPerfil"){ PantallaPerfil(navHostController) }
 }}

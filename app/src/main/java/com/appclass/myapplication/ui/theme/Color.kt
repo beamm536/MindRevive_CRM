@@ -13,3 +13,5 @@ val Pink40 = Color(0xFF7D5260)
 val MoradoTextFields = Color(0xFF6F67FA)
 val MarronBtns = Color(0xFF5C546C)
 val NegroLetras = Color(0xFF424242)
+
+val GrisDisabled = Color(0xFFD0D0D6)
