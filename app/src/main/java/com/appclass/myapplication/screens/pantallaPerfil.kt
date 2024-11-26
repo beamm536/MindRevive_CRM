@@ -14,7 +14,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,10 +29,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -111,6 +116,8 @@ fun MostrarDatosUsuario(){
     val (datosUser, setdatosUser) = remember { mutableStateOf<Map<String, Any>?>(null) }
     val (error, setError) = remember { mutableStateOf<String?>(null) }
 
+    var isFocused by remember { mutableStateOf(false) }
+
     //----------------------------PARTE DE LA LOGICA PARA MOSTRAR-----------------------------------
     //solo ejecuta la consulta si el usuario está autenticado - por lo tanto muestra un estado de cargando
     LaunchedEffect(currentUser) {
@@ -147,6 +154,14 @@ fun MostrarDatosUsuario(){
                 modifier = Modifier
 
             ){
+
+                Icon(
+                    imageVector = Icons.Filled.Person, // Icono de Material Design para la persona
+                    contentDescription = "Usuario", // Descripción accesible
+                    tint = Color.Gray, // Cambia el color del ícono si es necesario
+                    modifier = Modifier.size(130.dp) // Ajusta el tamaño del ícono
+                )
+
                 /*Text(
                     text = "Perfil",
                     style = TextStyle(
@@ -168,12 +183,29 @@ fun MostrarDatosUsuario(){
                     unfocusedBorderColor = Color.Gray,
                     focusedBorderColor = MoradoTextFields,
                     cursorColor = MoradoTextFields
-                )
+                ),
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.Create,
+                        contentDescription = "Update",
+                    )
+                }
             )
             OutlinedTextField(
                 value = datosUser["apellidos"]?.toString() ?: "No disponible",
                 onValueChange = {}, // No hacemos nada ya que es solo para mostrar
                 label = { Text("Apellidos") },
+                shape = RoundedCornerShape(16.dp),
+                colors = outlinedTextFieldColors(
+                    unfocusedBorderColor = Color.Gray,
+                    focusedBorderColor = MoradoTextFields,
+                    cursorColor = MoradoTextFields
+                )
+            )
+            OutlinedTextField(
+                value = datosUser["edad"]?.toString() ?: "No disponible",
+                onValueChange = {}, // No hacemos nada ya que es solo para mostrar
+                label = { Text("Edad") },
                 shape = RoundedCornerShape(16.dp),
                 colors = outlinedTextFieldColors(
                     unfocusedBorderColor = Color.Gray,
