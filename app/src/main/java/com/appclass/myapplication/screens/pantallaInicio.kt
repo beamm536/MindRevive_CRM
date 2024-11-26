@@ -68,18 +68,7 @@ fun PantallaInicio(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            if (datosUser != null) {
-                // Mostrar los datos del usuario
-                Text("Bienvenido, ${datosUser["nombre"] ?: "Usuario"}", fontSize = 24.sp)
-                Text("Email: ${datosUser["email"] ?: "No disponible"}", fontSize = 16.sp)
-                Text("Edad: ${datosUser["edad"] ?: "No especificada"}", fontSize = 16.sp)
-            } else if (error != null) {
-                // Mostrar un mensaje de error si falla la consulta
-                Text("Error: $error", color = Color.Red, fontSize = 16.sp)
-            } else {
-                //mostrador de carga de los datos mientras esperamos, es una funcion propia de kotlin
-                CircularProgressIndicator()
-            }
+            Text("bienvenido a la pantalla de inicio")
         }
     }
 }

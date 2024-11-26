@@ -27,7 +27,11 @@ import com.appclass.myapplication.screens.PantallaInicio
 import com.appclass.myapplication.screens.RegistroUsuario
 import com.appclass.myapplication.screens.LoginUsuario
 import com.appclass.myapplication.screens.PantallaGraficos
+<<<<<<< HEAD
 import com.appclass.myapplication.screens.PantallaInicio
+=======
+import com.appclass.myapplication.screens.PantallaPerfil
+>>>>>>> beatr2
 import com.appclass.myapplication.screens.Questionario
 import com.appclass.myapplication.screens.RegistroUsuario
 import com.google.firebase.firestore.FirebaseFirestore
@@ -44,12 +48,16 @@ fun NavigationWrapper(navHostController: NavHostController) {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     NavHost(navController = navHostController, startDestination = "calendarApp") {
 =======
     NavHost(navController = navHostController, startDestination = "inicioAppCRM") {
 >>>>>>> beatr2
 =======
     NavHost(navController = navHostController, startDestination = "pantallaInicio") {
+>>>>>>> beatr2
+=======
+    NavHost(navController = navHostController, startDestination = "inicioAppCRM") {
 >>>>>>> beatr2
 
         composable("pantallaInicio") { PantallaInicio(navHostController) }
@@ -59,7 +67,7 @@ fun NavigationWrapper(navHostController: NavHostController) {
         composable("home") { PantallaInicio(navHostController) }
         composable("citas") { CalendarioApp(navHostController) }
         composable("formulario") { Questionario(navHostController) }
-        composable("perfil"){ PantallaGraficos(navHostController)}
+        composable("perfil"){ PantallaPerfil(navHostController) }
 
         composable("inicioAppCRM"){ InicioAppCRM (navHostController)}
         composable("registroUsuario"){ RegistroUsuario (navHostController) }
@@ -67,9 +75,10 @@ fun NavigationWrapper(navHostController: NavHostController) {
 
         composable("calendarApp"){ CalendarioApp (navHostController) }
 
-
         composable("PantallaFormulario"){ Questionario (navHostController) }
         composable("pantallaGraficos") { PantallaGraficos(navHostController) }
         //para añadir los 29 días antes creo
         composable("buttonAddForms") { ButtonAddForms(navHostController) }
+
+        composable("pantallaPerfil"){ PantallaPerfil(navHostController) }
 }}
