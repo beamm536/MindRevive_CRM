@@ -307,6 +307,12 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
             // BTN CREAR CUENTA
             Button(
                 onClick = {
+                    //q sea necesario rellenar todos los campos y q no te deje acceder a la app
+                    if (nombre.isBlank() || apellidos.isBlank() || edad.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
+                        Toast.makeText(contextoApp, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
+
                     //mensajito para el email invalido
                     if (emailInvalido) {
                         Toast.makeText(contextoApp, "Email inválido", Toast.LENGTH_SHORT).show()

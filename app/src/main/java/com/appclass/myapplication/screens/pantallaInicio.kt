@@ -41,7 +41,7 @@ fun PantallaInicio(navController: NavHostController) {
     val (datosUser, setdatosUser) = remember { mutableStateOf<Map<String, Any>?>(null) }
     val (error, setError) = remember { mutableStateOf<String?>(null) }
 
-    // Solo ejecuta la consulta si el usuario está autenticado
+    //solo ejecuta la consulta si el usuario está autenticado
     LaunchedEffect(currentUser) {
         currentUser?.uid?.let { uid ->
             db.collection("usuariosCRM").document(uid).get()

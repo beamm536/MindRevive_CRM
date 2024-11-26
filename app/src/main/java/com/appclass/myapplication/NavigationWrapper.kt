@@ -32,13 +32,16 @@ import java.util.UUID
 @Composable
 fun NavigationWrapper(navHostController: NavHostController) {
 
-    NavHost(navController = navHostController, startDestination = "inicioAppCRM") {
+    NavHost(navController = navHostController, startDestination = "pantallaInicio") {
 
         composable("pantallaInicio") { PantallaInicio(navHostController) }
 
-        composable("home") { BottomNavigationBarComponent(navHostController) }
-        composable("message") { PantallaInicio(navHostController) }
-        composable("formulario") { BottomNavigationBarComponent(navHostController) }
+
+        //BARRA DE NAVEGACION -- COMPONENTE
+        composable("home") { PantallaInicio(navHostController) }
+        composable("citas") { CalendarioApp(navHostController) }
+        composable("formulario") { Questionario(navHostController) }
+        composable("perfil"){ PantallaGraficos(navHostController)}
 
         composable("inicioAppCRM"){ InicioAppCRM (navHostController)}
         composable("registroUsuario"){ RegistroUsuario (navHostController) }
