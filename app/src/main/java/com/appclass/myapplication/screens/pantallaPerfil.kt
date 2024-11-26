@@ -3,7 +3,6 @@ package com.appclass.myapplication.screens
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,9 +16,10 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults.outlinedTextFieldColors
 import androidx.compose.material3.Icon
@@ -149,29 +149,30 @@ fun MostrarDatosUsuario(){
 
         if (datosUser != null) { //SIEMPRE Y CUANDO HAYA DATOS - SE MOSTRARÁN
 
-            Row(
+            /*Row(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
 
-            ){
+            ){*/
 
                 Icon(
-                    imageVector = Icons.Filled.Person, // Icono de Material Design para la persona
-                    contentDescription = "Usuario", // Descripción accesible
-                    tint = Color.Gray, // Cambia el color del ícono si es necesario
-                    modifier = Modifier.size(130.dp) // Ajusta el tamaño del ícono
+                    imageVector = Icons.Filled.Person,
+                    contentDescription = "Usuario",
+                    tint = Color.Gray,
+                    modifier = Modifier.size(130.dp)
                 )
 
-                /*Text(
-                    text = "Perfil",
+                //He añadido para q quede mejor visualmente, q la primera se ponga en mayusculas
+                Text(
+                    text = datosUser["nombre"]?.toString()?.replaceFirstChar { it.uppercaseChar() } ?: "Usuario",
                     style = TextStyle(
                         fontSize = 30.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
-                )*/
+                )
 
-            }
+           // }
 
             //mostramos los datos del usuario en los inputs
             OutlinedTextField(
@@ -238,13 +239,35 @@ fun MostrarDatosUsuario(){
         }
     }
 
+
+
 }
 
+@Composable
+fun ElevatedCardExample() {
 
+    //val (datosUser, setdatosUser) = remember { mutableStateOf<Map<String, Any>?>(null) }
+
+    ElevatedCard(
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 6.dp
+        ),
+        modifier = Modifier
+            .size(width = 240.dp, height = 100.dp)
+    ) {
+        Text(
+            //text = "NOMBRE: ${datosUser?.get("nombre")?.toString() ?: "no pilla lo de dentro"}",
+            modifier = Modifier
+                .padding(16.dp),
+            textAlign = TextAlign.Center,
+        )
+    }
+}
 
 
 @Composable
 fun LlamadaFunciones3(navController: NavController, modifier: Modifier){
+
 
     Column(
         modifier = Modifier
@@ -255,6 +278,7 @@ fun LlamadaFunciones3(navController: NavController, modifier: Modifier){
     ){
         Spacer(modifier = Modifier.size(100.dp))
         MostrarDatosUsuario()
+        ElevatedCardExample()
     }
 
 }
