@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.appclass.myapplication.componentes.BottomNavigationBarComponent
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -26,7 +28,7 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun PantallaGraficos(navHostController: NavController) {
+fun PantallaGraficos(navController: NavHostController) {
     var data by remember { mutableStateOf<List<Formulario>>(emptyList()) }  // Estado para los datos
     val coroutineScope = rememberCoroutineScope()
 
@@ -41,13 +43,14 @@ fun PantallaGraficos(navHostController: NavController) {
         topBar = {
             TopAppBar(
                 title = { Text("Pantalla de Gráficos") },
-                navigationIcon = {
+                /*navigationIcon = {
                     IconButton(onClick = { navHostController.popBackStack() }) {
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Volver")
                     }
-                }
+                }*/
             )
-        }
+        },
+        bottomBar = { BottomNavigationBarComponent(navController = navController) }
     ) { padding ->
         Column(
             modifier = Modifier

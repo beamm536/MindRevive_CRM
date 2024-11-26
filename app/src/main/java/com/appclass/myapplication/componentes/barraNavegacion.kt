@@ -16,7 +16,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 @Composable
 fun BottomNavigationBarComponent(navController: NavController) {
     // Define los elementos de navegación aquí para poder reutilizar el componente
-    val items = listOf("home", "message", "form")
+    val items = listOf("home", "citas", "formulario", "perfil")
     val selectedRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
     NavigationBar(
@@ -29,8 +29,9 @@ fun BottomNavigationBarComponent(navController: NavController) {
                     Icon(
                         imageVector = when (item) {
                             "home" -> Icons.Default.Home
-                            "message" -> Icons.Default.Call
+                            "citas" -> Icons.Default.Call
                             "form" -> Icons.Default.Edit
+                            "perfil" -> Icons.Default.Person
                             else -> Icons.Default.Home
                         },
                         contentDescription = item,
@@ -41,8 +42,9 @@ fun BottomNavigationBarComponent(navController: NavController) {
                     Text(
                         text = when (item) {
                             "home" -> "Home"
-                            "message" -> "Mensaje"
-                            "form" -> "Formulario"
+                            "citas" -> "Citas"
+                            "formulario" -> "Formulario"
+                            "perfil" -> "Perfil"
                             else -> ""
                         },
                         fontSize = if (isSelected) 12.sp else 10.sp,

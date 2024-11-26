@@ -114,6 +114,7 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
     var apellidos by remember { mutableStateOf("") }
     var edad by remember { mutableStateOf("") }//NO PONERLO CON COMILLAS SI ES UN INTTTT
     var email by remember { mutableStateOf("") }
+    var emailInvalido by remember { mutableStateOf(false) }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 
@@ -194,7 +195,10 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
             // EMAIL
             OutlinedTextField(
                 value = email,
-                onValueChange = { email = it },
+                onValueChange = {
+                    email = it
+                    emailInvalido = !ValidacionEmail(email)
+                },
                 label = { Text("Email") },
                 shape = RoundedCornerShape(16.dp),
                 colors = outlinedTextFieldColors(
@@ -202,8 +206,17 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
                     focusedBorderColor = MoradoTextFields,
                     cursorColor = MoradoTextFields
                 ),
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email)
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
+                isError = emailInvalido
             )
+
+            if (emailInvalido) {//mensajito en rojo por debajo del input
+                Text(
+                    text = "El email debe contener '@' y terminar en 'gmail.com'",
+                    color = Color.Red,
+                    fontSize = 12.sp
+                )
+            }
         }
 
         item {
@@ -294,6 +307,17 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
             // BTN CREAR CUENTA
             Button(
                 onClick = {
+                    //q sea necesario rellenar todos los campos y q no te deje acceder a la app
+                    if (nombre.isBlank() || apellidos.isBlank() || edad.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
+                        Toast.makeText(contextoApp, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
+
+                    //mensajito para el email invalido
+                    if (emailInvalido) {
+                        Toast.makeText(contextoApp, "Email inválido", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
 
                     //TOAST PARA MOSTRAR MENSAJE DE Q EL USUARIO SE HA REGISTRADO --> explicado en apuntesRegistro
                     Toast.makeText(
@@ -328,7 +352,7 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
                 color = Color.Blue,
                 fontSize = 18.sp,
                 modifier = Modifier.clickable {
-                    navController.navigate("loginUsuariow")
+                    navController.navigate("loginUsuario")
                 }
             )
         }
@@ -366,14 +390,22 @@ fun OnclickBtnRegistrar(
                     var user = auth.currentUser
                     user?.let {
                         //parametros ordenados
-                        val datosUser = User(uid = it.uid, nombre = nombre, apellidos = apellidos ,edad = edad,email = email)
+                        val datosUser = User(
+                            uid = it.uid,
+                            nombre = nombre,
+                            apellidos = apellidos,
+                            edad = edad,
+                            email = email
+                        )
 
                         dbFirestore.collection("usuariosCRM").document(it.uid).set(datosUser)
                             .addOnSuccessListener {
                                 // Éxito al guardar en Firestore
+                                Log.d("Registro", "Usuario guardado exitosamente en Firestore")
                             }
                             .addOnFailureListener {
                                 // Manejo de errores al guardar en Firestore
+                                Log.e("Registro", "Error al guardar usuario en Firestore: ${it.message}")
                             }
                     }
 
@@ -424,6 +456,11 @@ fun ErrPasswordNoCoinciden(
             )
         }
     }
+}
+
+//para q no podamos registrar un email como si fuera un nombre por ejemplo
+fun ValidacionEmail(email:String): Boolean{ //va a devolver un boolean
+    return email.contains("@") && email.endsWith("gmail.com")
 }
 
 
