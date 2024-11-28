@@ -44,7 +44,7 @@ import java.util.UUID
 fun NavigationWrapper(navHostController: NavHostController) {
 
 
-    NavHost(navController = navHostController, startDestination = "pantallaPerfil") {
+    NavHost(navController = navHostController, startDestination = "inicioAppCRM") {
 
         composable("pantallaInicio") { PantallaInicio(navHostController) }
 
