@@ -23,8 +23,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.ExposedDropdownMenuDefaults.outlinedTextFieldColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -262,6 +265,8 @@ fun MostrarDatosUsuario(){
                 enabled = false
             )
 
+            DropDownGenero()
+
         } else if (error != null) {
             // Mostrar un mensaje de error si falla la consulta
             Text("Error: $error", color = Color.Red, fontSize = 16.sp)
@@ -289,7 +294,7 @@ fun MostrarDatosUsuario(){
 
 }
 
-@Composable
+/*@Composable
 fun IconoPantallaPerfil(modifier: Modifier){
     Row (
         verticalAlignment = Alignment.CenterVertically,
@@ -302,9 +307,58 @@ fun IconoPantallaPerfil(modifier: Modifier){
                 .size(100.dp)
         )
     }
+}*/
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropDownGenero(){
+
+    var listaGeneros =  listOf("Masculino", "Femenino", "Otro")
+    var opcionSeleccionada by remember { mutableStateOf(listaGeneros[0]) }
+    var isExpanded by remember { mutableStateOf(false) }
+
+    Column (
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+
+    ){
+        ExposedDropdownMenuBox(
+            expanded = isExpanded,
+            onExpandedChange = { isExpanded = !isExpanded}
+        ) {
+            OutlinedTextField(
+                modifier = Modifier
+                    .menuAnchor(),
+                value = opcionSeleccionada,
+                onValueChange = {},
+                readOnly = true,
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
+                }
+            )
+
+            ExposedDropdownMenu(
+                expanded = isExpanded,
+                onDismissRequest = { isExpanded = false }
+            ) {
+                listaGeneros.forEachIndexed { index, text ->
+                    DropdownMenuItem(
+                        text = { Text(text = text) },
+                        onClick = {
+                            opcionSeleccionada = listaGeneros[index]
+                            isExpanded = false
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                    )
+                }
+            }
+
+            Text(text = "Género:")
+        }
+    }
 }
-
-
 
 fun ModificarDatosUsuario(
     nombre: String,
@@ -354,7 +408,7 @@ fun LlamadaFunciones3(navController: NavController, modifier: Modifier){
         Spacer(modifier = Modifier.size(100.dp))
         MostrarDatosUsuario()
         //ElevatedCardExample()
-        IconoPantallaPerfil(modifier)
+        //IconoPantallaPerfil(modifier)
     }
 
 }
