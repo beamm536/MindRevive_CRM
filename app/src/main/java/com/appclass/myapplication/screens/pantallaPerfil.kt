@@ -2,20 +2,23 @@ package com.appclass.myapplication.screens
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Person
@@ -60,6 +63,7 @@ import com.appclass.myapplication.ui.theme.GrisDisabled
 import com.appclass.myapplication.ui.theme.MoradoTextFields
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import androidx.compose.foundation.Image as Image1
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -168,10 +172,11 @@ fun MostrarDatosUsuario(){
 
 
     //-------------------------PARTE VISUAL DE LOS DATOS--------------------------------------------
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .fillMaxHeight(0.7f) ,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -190,12 +195,14 @@ fun MostrarDatosUsuario(){
                     tint = Color.Gray,
                     modifier = Modifier.size(130.dp)
                 )*/
-            Image(
-                painter = painterResource(id = R.drawable.profile_user),
-                contentDescription = "",
-                modifier = Modifier
-                    .size(110.dp)
-            )
+                item {
+                Image1(
+                    painter = painterResource(id = R.drawable.profile_user),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .size(110.dp)
+                )
+
 
                 //He añadido para q quede mejor visualmente, q la primera se ponga en mayusculas
                 Text(
@@ -206,108 +213,115 @@ fun MostrarDatosUsuario(){
                         color = Color.Black
                     )
                 )
-
-           // }
-
-            //mostramos los datos del usuario en los inputs
-            OutlinedTextField(
-                value = nombre/*datosUser["nombre"]?.toString() ?: "Usuario"*/,
-                onValueChange = { nombre = it}, // No hacemos nada ya que es solo para mostrar
-                label = { Text("Nombre") },
-                shape = RoundedCornerShape(16.dp),
-                colors = outlinedTextFieldColors(
-                    unfocusedBorderColor = Color.Gray,
-                    focusedBorderColor = MoradoTextFields,
-                    cursorColor = MoradoTextFields
-                ),
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.Create,
-                        contentDescription = "Update",
-                    )
                 }
-            )
-            OutlinedTextField(
-                value = apellidos/*datosUser["apellidos"]?.toString() ?: "No disponible"*/,
-                onValueChange = { apellidos = it }, // No hacemos nada ya que es solo para mostrar
-                label = { Text("Apellidos") },
-                shape = RoundedCornerShape(16.dp),
-                colors = outlinedTextFieldColors(
-                    unfocusedBorderColor = Color.Gray,
-                    focusedBorderColor = MoradoTextFields,
-                    cursorColor = MoradoTextFields
-                )
-            )
-            OutlinedTextField(
-                value = edad/*datosUser["edad"]?.toString() ?: "No disponible"*/,
-                onValueChange = { edad = it }, // No hacemos nada ya que es solo para mostrar
-                label = { Text("Edad") },
-                shape = RoundedCornerShape(16.dp),
-                colors = outlinedTextFieldColors(
-                    unfocusedBorderColor = Color.Gray,
-                    focusedBorderColor = MoradoTextFields,
-                    cursorColor = MoradoTextFields
-                )
-            )
-            OutlinedTextField(
-                value = datosUser["email"]?.toString() ?: "No disponible", //en caso de q no haya ningun valor q salga no disponible
-                onValueChange = {},
-                label = { Text("Email") },
-                shape = RoundedCornerShape(16.dp),
-                colors = outlinedTextFieldColors(
-                    unfocusedBorderColor = Color.Gray,
-                    focusedBorderColor = MoradoTextFields,
-                    cursorColor = MoradoTextFields,
-                    disabledLabelColor = GrisDisabled, // Color de la etiqueta cuando está deshabilitado
-                    disabledBorderColor = GrisDisabled
-                ),
-                readOnly = true,
-                enabled = false
-            )
 
-            DropDownGenero()
+                item {
+                //mostramos los datos del usuario en los inputs
+                OutlinedTextField(
+                    value = nombre/*datosUser["nombre"]?.toString() ?: "Usuario"*/,
+                    onValueChange = { nombre = it}, // No hacemos nada ya que es solo para mostrar
+                    label = { Text("Nombre") },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = outlinedTextFieldColors(
+                        unfocusedBorderColor = Color.Gray,
+                        focusedBorderColor = MoradoTextFields,
+                        cursorColor = MoradoTextFields
+                    ),
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Filled.Create,
+                            contentDescription = "Update",
+                        )
+                    }
+                )
+                }
+                item {
+                OutlinedTextField(
+                    value = apellidos/*datosUser["apellidos"]?.toString() ?: "No disponible"*/,
+                    onValueChange = { apellidos = it }, // No hacemos nada ya que es solo para mostrar
+                    label = { Text("Apellidos") },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = outlinedTextFieldColors(
+                        unfocusedBorderColor = Color.Gray,
+                        focusedBorderColor = MoradoTextFields,
+                        cursorColor = MoradoTextFields
+                    )
+                )
+                }
+                item {
+                OutlinedTextField(
+                    value = edad/*datosUser["edad"]?.toString() ?: "No disponible"*/,
+                    onValueChange = { edad = it }, // No hacemos nada ya que es solo para mostrar
+                    label = { Text("Edad") },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = outlinedTextFieldColors(
+                        unfocusedBorderColor = Color.Gray,
+                        focusedBorderColor = MoradoTextFields,
+                        cursorColor = MoradoTextFields
+                    )
+                )
+                }
+                item {
+                OutlinedTextField(
+                    value = datosUser["email"]?.toString() ?: "No disponible", //en caso de q no haya ningun valor q salga no disponible
+                    onValueChange = {},
+                    label = { Text("Email") },
+                    shape = RoundedCornerShape(16.dp),
+                    colors = outlinedTextFieldColors(
+                        unfocusedBorderColor = Color.Gray,
+                        focusedBorderColor = MoradoTextFields,
+                        cursorColor = MoradoTextFields,
+                        disabledLabelColor = GrisDisabled,
+                        disabledBorderColor = GrisDisabled
+                    ),
+                    readOnly = true,
+                    enabled = false
+                )
+                }
+
+                item {
+                DropDownGenero()
+                }
 
         } else if (error != null) {
+            item {
             // Mostrar un mensaje de error si falla la consulta
-            Text("Error: $error", color = Color.Red, fontSize = 16.sp)
+                Text("Error: $error", color = Color.Red, fontSize = 16.sp)
+            }
         } else {
+            item {
             //mostrador de carga de los datos mientras esperamos, es una funcion propia de kotlin
             CircularProgressIndicator()
+            }
         }
-        Button(
-            onClick = {
-                val uid = currentUser?.uid
-                if (uid != null) {
-                    ModificarDatosUsuario(nombre, apellidos, edad, uid, db, contexto)
-                } else {
-                    Toast.makeText(contexto, "No se puede guardar: Usuario no autenticado.", Toast.LENGTH_SHORT).show()
-                }
-            },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp)
-        ) {
-            Text("Confirmar Cambios", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-        }
+
+            item {
+            Button(
+                onClick = {
+                    val uid = currentUser?.uid
+                    if (uid != null) {
+                        ModificarDatosUsuario(nombre, apellidos, edad, uid, db, contexto)
+                    } else {
+                        Toast.makeText(contexto, "No se puede guardar: Usuario no autenticado.", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Text("Confirmar Cambios", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            }
+            }
+
     }
-
-
+    Icon(
+        imageVector = Icons.Default.ArrowDropDown, // Flecha hacia abajo predeterminada
+        contentDescription = "Flecha hacia abajo",
+        tint = Color.Black, // Cambia el color si es necesario
+        modifier = Modifier.size(24.dp)
+    )
 
 }
 
-/*@Composable
-fun IconoPantallaPerfil(modifier: Modifier){
-    Row (
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ){
-        Image(
-            painter = painterResource(id = R.drawable.img_mobile_app_profile),
-            contentDescription = "",
-            modifier = Modifier
-                .size(100.dp)
-        )
-    }
-}*/
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -329,8 +343,14 @@ fun DropDownGenero(){
             onExpandedChange = { isExpanded = !isExpanded}
         ) {
             OutlinedTextField(
+                label = { Text("Género") },
+                shape = RoundedCornerShape(16.dp),
+                colors = outlinedTextFieldColors(
+                    unfocusedBorderColor = Color.Gray,
+                    focusedBorderColor = MoradoTextFields
+                ),
                 modifier = Modifier
-                    .menuAnchor(),
+                    .menuAnchor(), //esto es muy necesario jajaja hace q salgan las opciones del menu jijiji :)
                 value = opcionSeleccionada,
                 onValueChange = {},
                 readOnly = true,
@@ -355,7 +375,7 @@ fun DropDownGenero(){
                 }
             }
 
-            Text(text = "Género:")
+            //Text(text = "Género:")
         }
     }
 }
@@ -405,8 +425,10 @@ fun LlamadaFunciones3(navController: NavController, modifier: Modifier){
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Spacer(modifier = Modifier.size(100.dp))
-        MostrarDatosUsuario()
+
+            Spacer(modifier = Modifier.size(100.dp))
+            MostrarDatosUsuario()
+
         //ElevatedCardExample()
         //IconoPantallaPerfil(modifier)
     }
