@@ -34,7 +34,9 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.ExposedDropdownMenuDefaults.outlinedTextFieldColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -278,10 +280,10 @@ fun MostrarDatosUsuario(){
                     enabled = false
                 )
                 }
-
-                item {
-                DropDownGenero()
-                }
+//he quitado el drop down al final :/    ---> seria la llamada a los radio button
+//                item {
+//                DropDownGenero()
+//                }
 
         } else if (error != null) {
             item {
@@ -323,62 +325,57 @@ fun MostrarDatosUsuario(){
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+//----------FALTA LA ADAPTACION Y PONERLO EN UN ROW Y AÑADIRLE BIEN LA LOGICA 
+
 @Composable
-fun DropDownGenero(){
+fun RadioButtonWithImage() {
+    // Estado para manejar la opción seleccionada
+    var selectedOption by remember { mutableStateOf("Option1") }
 
-    var listaGeneros =  listOf("Masculino", "Femenino", "Otro")
-    var opcionSeleccionada by remember { mutableStateOf(listaGeneros[0]) }
-    var isExpanded by remember { mutableStateOf(false) }
-
-    Column (
+    // Layout principal
+    Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+        verticalArrangement = Arrangement.Top
+    ) {
+        Text(text = "Selecciona una opción", style = MaterialTheme.typography.h6)
 
-    ){
-        ExposedDropdownMenuBox(
-            expanded = isExpanded,
-            onExpandedChange = { isExpanded = !isExpanded}
-        ) {
-            OutlinedTextField(
-                label = { Text("Género") },
-                shape = RoundedCornerShape(16.dp),
-                colors = outlinedTextFieldColors(
-                    unfocusedBorderColor = Color.Gray,
-                    focusedBorderColor = MoradoTextFields
-                ),
-                modifier = Modifier
-                    .menuAnchor(), //esto es muy necesario jajaja hace q salgan las opciones del menu jijiji :)
-                value = opcionSeleccionada,
-                onValueChange = {},
-                readOnly = true,
-                trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
-                }
-            )
-
-            ExposedDropdownMenu(
-                expanded = isExpanded,
-                onDismissRequest = { isExpanded = false }
-            ) {
-                listaGeneros.forEachIndexed { index, text ->
-                    DropdownMenuItem(
-                        text = { Text(text = text) },
-                        onClick = {
-                            opcionSeleccionada = listaGeneros[index]
-                            isExpanded = false
-                        },
-                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
-                    )
-                }
+        // Radio Buttons
+        Column(modifier = Modifier.padding(top = 16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    selected = selectedOption == "Option1",
+                    onClick = { selectedOption = "Option1" }
+                )
+                Text(text = "Opción 1", modifier = Modifier.padding(start = 8.dp))
             }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    selected = selectedOption == "Option2",
+                    onClick = { selectedOption = "Option2" }
+                )
+                Text(text = "Opción 2", modifier = Modifier.padding(start = 8.dp))
+            }
+        }
 
-            //Text(text = "Género:")
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Mostrar la imagen según la opción seleccionada
+        when (selectedOption) {
+            "Option1" -> Image1(
+                painter = painterResource(id = R.drawable.image1),
+                contentDescription = "Imagen 1",
+                modifier = Modifier.size(200.dp)
+            )
+            "Option2" -> Image1(
+                painter = painterResource(id = R.drawable.image2),
+                contentDescription = "Imagen 2",
+                modifier = Modifier.size(200.dp)
+            )
         }
     }
 }
+
 
 fun ModificarDatosUsuario(
     nombre: String,
