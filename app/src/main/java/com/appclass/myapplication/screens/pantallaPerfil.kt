@@ -237,7 +237,7 @@ fun MostrarDatosUsuario(){
             )
             OutlinedTextField(
                 value = edad/*datosUser["edad"]?.toString() ?: "No disponible"*/,
-                onValueChange = { edad }, // No hacemos nada ya que es solo para mostrar
+                onValueChange = { edad = it }, // No hacemos nada ya que es solo para mostrar
                 label = { Text("Edad") },
                 shape = RoundedCornerShape(16.dp),
                 colors = outlinedTextFieldColors(
