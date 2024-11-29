@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -142,6 +143,9 @@ fun MostrarDatosUsuario(){
 
     var isFocused by remember { mutableStateOf(false) }
 
+    var opcionSeleccionada by remember { mutableStateOf("Hombre") }//para los radio button
+
+
     //----------------------------PARTE DE LA LOGICA PARA MOSTRAR-----------------------------------
     //solo ejecuta la consulta si el usuario está autenticado - por lo tanto muestra un estado de cargando
     LaunchedEffect(currentUser) {
@@ -185,25 +189,20 @@ fun MostrarDatosUsuario(){
 
         if (datosUser != null) { //SIEMPRE Y CUANDO HAYA DATOS - SE MOSTRARÁN
 
-            /*Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
 
-            ){*/
-
-                /*Icon(
-                    imageVector = Icons.Filled.Person,
-                    contentDescription = "Usuario",
-                    tint = Color.Gray,
-                    modifier = Modifier.size(130.dp)
-                )*/
+            ////AQUI ES DND QUIERO CAMBIAR LA IMG
                 item {
-                Image1(
+
+                    MostrarImagenPerfil(opcionSeleccionada)
+
+                /*Image1(
                     painter = painterResource(id = R.drawable.profile_user),
                     contentDescription = "",
                     modifier = Modifier
                         .size(110.dp)
-                )
+                )*/
+
+
 
 
                 //He añadido para q quede mejor visualmente, q la primera se ponga en mayusculas
@@ -280,6 +279,12 @@ fun MostrarDatosUsuario(){
                     enabled = false
                 )
                 }
+            item{
+                RadioButtonGenero{seleccion ->
+                    opcionSeleccionada = seleccion
+                }
+            }
+
 //he quitado el drop down al final :/    ---> seria la llamada a los radio button
 //                item {
 //                DropDownGenero()
@@ -312,6 +317,7 @@ fun MostrarDatosUsuario(){
             ) {
                 Text("Confirmar Cambios", fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
+
             }
 
     }
@@ -328,53 +334,80 @@ fun MostrarDatosUsuario(){
 //----------FALTA LA ADAPTACION Y PONERLO EN UN ROW Y AÑADIRLE BIEN LA LOGICA 
 /*
 @Composable
-fun RadioButtonWithImage() {
-    // Estado para manejar la opción seleccionada
-    var selectedOption by remember { mutableStateOf("Option1") }
+fun RadioButtonGenero(seleccion: (String) -> Unit) {
 
-    // Layout principal
+    var opcionSeleccionada by remember { mutableStateOf("") }
+
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Text(text = "Selecciona una opción", style = MaterialTheme.typography.h6)
+        Text(text = "Selecciona una opción")
 
-        // Radio Buttons
+
         Column(modifier = Modifier.padding(top = 16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(
-                    selected = selectedOption == "Option1",
-                    onClick = { selectedOption = "Option1" }
+                        selected = opcionSeleccionada == "Hombre",
+                    onClick = {
+                        opcionSeleccionada = "Hombre"
+                        seleccion(opcionSeleccionada)
+                    }
                 )
-                Text(text = "Opción 1", modifier = Modifier.padding(start = 8.dp))
+                Text(text = "Hombre", modifier = Modifier.padding(start = 8.dp))
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(
-                    selected = selectedOption == "Option2",
-                    onClick = { selectedOption = "Option2" }
+                    selected = opcionSeleccionada == "Mujer",
+                    onClick = {
+                        opcionSeleccionada = "Mujer"
+                        seleccion(opcionSeleccionada)
+                    }
                 )
-                Text(text = "Opción 2", modifier = Modifier.padding(start = 8.dp))
+                Text(text = "Mujer", modifier = Modifier.padding(start = 8.dp))
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    selected = opcionSeleccionada == "Otro",
+                    onClick = {
+                        opcionSeleccionada = "Otro"
+                        seleccion(opcionSeleccionada)
+                    }
+                )
+                Text(text = "Otro", modifier = Modifier.padding(start = 8.dp))
             }
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Mostrar la imagen según la opción seleccionada
-        when (selectedOption) {
-            "Option1" -> Image1(
-                painter = painterResource(id = R.drawable.image1),
-                contentDescription = "Imagen 1",
-                modifier = Modifier.size(200.dp)
-            )
-            "Option2" -> Image1(
-                painter = painterResource(id = R.drawable.image2),
-                contentDescription = "Imagen 2",
-                modifier = Modifier.size(200.dp)
-            )
-        }
+        //segun la opcion seleccionada q salga una imagen u otraa ---> esta parte de la logica la tengo en otra funcion
     }
-}*/
+}
+
+@Composable
+fun MostrarImagenPerfil(opcion: String) {
+    when (opcion) {
+        "Hombre" -> Image1(
+            painter = painterResource(id = R.drawable.img_male_avatar),
+            contentDescription = "Imagen Hombre",
+            modifier = Modifier.size(200.dp)
+        )
+        "Mujer" -> Image1(
+            painter = painterResource(id = R.drawable.profile_user),
+            contentDescription = "Imagen Mujer",
+            modifier = Modifier.size(200.dp)
+        )
+        "Otro" -> Icon(
+                imageVector = Icons.Default.Person,
+                contentDescription = "Img3",
+                tint = Color.Gray,
+                modifier = Modifier.size(200.dp)
+            )
+    }
+}
 
 
 fun ModificarDatosUsuario(
