@@ -326,7 +326,7 @@ fun MostrarDatosUsuario(){
 
 
 //----------FALTA LA ADAPTACION Y PONERLO EN UN ROW Y AÑADIRLE BIEN LA LOGICA 
-
+/*
 @Composable
 fun RadioButtonWithImage() {
     // Estado para manejar la opción seleccionada
