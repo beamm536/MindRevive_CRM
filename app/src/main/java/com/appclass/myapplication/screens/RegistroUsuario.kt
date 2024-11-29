@@ -329,7 +329,7 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
                     ).show()
 
                     //REDIRECCION DENTRO DE LA APP
-                    navController.navigate("pantallaInicio")
+                    //navController.navigate("pantallaInicio")
 
                     OnclickBtnRegistrar(
                         nombre = nombre,
@@ -338,7 +338,8 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
                         email = email,
                         password = password,
                         confirmPassword = confirmPassword,
-                        onError = { message -> errorMessage = message }
+                        onError = { message -> errorMessage = message },
+                        navController = NavController(contextoApp)
 
                     )
                 },
@@ -364,6 +365,7 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
 
 
 
+
 //ESTA FUNCION NO ES COMPOSABLE!!
 fun OnclickBtnRegistrar(
     nombre: String,
@@ -372,7 +374,8 @@ fun OnclickBtnRegistrar(
     email: String,
     password: String,
     confirmPassword: String,
-    onError: (String) -> Unit
+    onError: (String) -> Unit,
+    navController: NavController
 ){
 
 
@@ -392,7 +395,7 @@ fun OnclickBtnRegistrar(
                     //mensaje de q el correo ya esta registrado
                     Log.w("Registro", "Correo duplicado detectado: $email")
                     onError("El correo ya está registrado.")
-                    return@addOnSuccessListener//paramos la ejecucion
+
                 } else {//sino creamos cuenta
 
                     Log.d("Registro", "Correo no registrado previamente, creando cuenta en Auth...")
@@ -426,6 +429,7 @@ fun OnclickBtnRegistrar(
                                                 "Registro",
                                                 "Usuario guardado exitosamente en Firestore"
                                             )
+                                            navController.navigate("pantallaInicio")
                                         }
                                         .addOnFailureListener {
                                             // Manejo de errores al guardar en Firestore
