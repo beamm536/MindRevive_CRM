@@ -43,6 +43,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 import com.appclass.myapplication.componentes.BottomNavigationBarComponent
+import com.google.firebase.auth.FirebaseAuth
 import java.time.LocalDate
 
 
@@ -84,6 +85,8 @@ fun Questionario(navController: NavController) {
 @Composable
 fun FormularioInput(navController: NavController) {
     // State variables for form fields
+    val currentUser = FirebaseAuth.getInstance().currentUser
+
     val estadoAnimo = remember { mutableStateOf(3) } // 0-5
     val motivacion = remember { mutableStateOf(3) }
     val trabajo = remember { mutableStateOf(8) } // default value between 0-24
@@ -468,56 +471,59 @@ fun EnviarFormularioButton(
     notaGlobal: Int
 ) {
     Button(onClick = {
-        Log.d(
-            "Formulario",
-            "Datos enviados: estadoAnimo=$estadoAnimo, motivacion=$motivacion, trabajo=$trabajo, descanso=$descanso, ejercicio=$ejercicio, social=$social, hobbies=$hobbies, tiempoClima=${selectedWeather.toString()}, logros=$logros, cuidadoPersonal=$cuidadoPersonal, emocionesPredominantes=$emociones, pensamientosNegativos=$pensamientosNegativos, nivelAnsiedad=$nivelAnsiedad, calidadSueno=$selectedSueno, agradecimientos=$agradecimientos, intensidadAutocritica=$intensidadAutocritica, expectativaManana=$expectativaManana, otrosComentarios=$otrosComentarios, notaGlobal=$notaGlobal"
-        )
-        val diaYHora: String = LocalDateTime.now()
-            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-        Log.d("Formulario", "dia y hora: $diaYHora")
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            val userId = currentUser.uid ?: "Usuario desconocido"
+            val diaYHora = LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            val formularioId = UUID.randomUUID().toString()
 
-        val formularioId = UUID.randomUUID().toString()
-        Log.d("Formulario", "ID generado: $formularioId")
+            // Log de datos básicos
+            Log.d("Formulario", "Usuario: $userId, Fecha: $diaYHora, ID: $formularioId")
 
+            val formulario = Formulario(
+                fecha = diaYHora,
+                estadoAnimo = estadoAnimo,
+                motivacion = motivacion,
+                trabajo = trabajo,
+                descanso = descanso,
+                ejercicio = ejercicio,
+                social = social,
+                hobbies = hobbies,
+                tiempoClima = selectedWeather,
+                logros = logros,
+                cuidadoPersonal = cuidadoPersonal,
+                emocionesPredominantes = emociones,
+                pensamientosNegativos = pensamientosNegativos,
+                nivelAnsiedad = nivelAnsiedad,
+                calidadSueno = selectedSueno,
+                agradecimientos = agradecimientos,
+                intensidadAutocritica = intensidadAutocritica,
+                expectativaManana = expectativaManana,
+                otrosComentarios = otrosComentarios,
+                notaGlobal = notaGlobal
+            )
 
-        val formulario = Formulario(
-            fecha = diaYHora,
-            estadoAnimo = estadoAnimo,
-            motivacion = motivacion,
-            trabajo = trabajo,
-            descanso = descanso,
-            ejercicio = ejercicio,
-            social = social,
-            hobbies = hobbies,
-            tiempoClima = selectedWeather.toString(),
-            logros = logros,
-            cuidadoPersonal = cuidadoPersonal,
-            emocionesPredominantes = emociones,
-            pensamientosNegativos = pensamientosNegativos,
-            nivelAnsiedad = nivelAnsiedad,
-            calidadSueno = selectedSueno,
-            agradecimientos = agradecimientos,  // sale automático
-            intensidadAutocritica = intensidadAutocritica,  // sale automático
-            expectativaManana = expectativaManana,  // sale automático
-            otrosComentarios = otrosComentarios,  // sale automático
-            notaGlobal = notaGlobal  // sale automático
-        )
-
-        // Aquí lógica para enviar los datos a Firestore
-        val db = FirebaseFirestore.getInstance()
-
-        db.collection("formularioDiario")
-            .document(formularioId)
-            .set(formulario)
-            .addOnSuccessListener {
-                Log.d("Formulario", "Formulario guardado con éxito!")
-            }
-            .addOnFailureListener { e ->
-                Log.e("Formulario", "Error al guardar el formulario", e)
-            }
+            // Envío del formulario a Firestore
+            val db = FirebaseFirestore.getInstance()
+            db.collection("usuarios")
+                .document(userId)
+                .collection("formulariosDiarios")
+                .document(formularioId)
+                .set(formulario)
+                .addOnSuccessListener {
+                    Log.d("Formulario", "Formulario guardado con éxito para el usuario $userId")
+                }
+                .addOnFailureListener { e ->
+                    Log.e("Formulario", "Error al guardar el formulario", e)
+                }
+        } else {
+            // Manejo del caso donde no hay usuario autenticado
+            Log.e("Formulario", "No hay usuario autenticado")
+        }
     }) {
         Text("Enviar")
     }
-
-
 }
+
+
