@@ -332,7 +332,7 @@ fun MostrarDatosUsuario(){
 
 
 //----------FALTA LA ADAPTACION Y PONERLO EN UN ROW Y AÑADIRLE BIEN LA LOGICA 
-
+/*
 @Composable
 fun RadioButtonGenero(seleccion: (String) -> Unit) {
 

@@ -26,7 +26,9 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,48 +46,84 @@ import java.time.format.DateTimeFormatter
 import java.util.UUID
 import com.appclass.myapplication.componentes.BottomNavigationBarComponent
 import com.google.firebase.auth.FirebaseAuth
-import java.time.LocalDate
+
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Questionario(navController: NavController) {
+    val db = FirebaseFirestore.getInstance()
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
+    val today = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE) // Get today's date in ISO format (yyyy-MM-dd)
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Cuestionario",
-                        fontSize = 24.sp,
-                        color = Color.White
+    Log.e("Que busca", "$today devuelve el parametro de hoy")
+    // Estado para manejar si ya se encontró el formulario o no
+    var formExists by remember { mutableStateOf(false) }
+
+    // Comprobar si el formulario existe
+    LaunchedEffect(userId, today) {
+        val query = db.collection("usuariosCRM")
+            .document(userId ?: "")
+            .collection("formulariosDiarios")
+            .whereEqualTo("fecha", today)
+
+        query.get().addOnSuccessListener { querySnapshot ->
+            formExists = !querySnapshot.isEmpty
+        }
+        Log.e("EXISTE EL FORM?", "Solucion: $formExists")
+    }
+
+    // Mostrar contenido dependiendo de si el formulario existe
+    if (formExists) {
+        // Si ya existe el formulario, navega a la pantalla de gráficos
+        navController.navigate("pantallaGraficos")
+    } else {
+        // Si no existe, muestra el formulario
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = "Cuestionario",
+                            fontSize = 24.sp,
+                            color = Color.White
+                        )
+                    },
+                    colors = TopAppBarDefaults.mediumTopAppBarColors(
+                        containerColor = Color(0xFF0277BD)
                     )
-                },
-                colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = Color(0xFF0277BD)
                 )
-            )
-        },
-                bottomBar = { BottomNavigationBarComponent(navController = navController) }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.size(30.dp))
-            FormularioInput(navController = navController)
+            },
+            bottomBar = {
+                BottomNavigationBarComponent(navController = navController)
+            }
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.size(30.dp))
+                FormularioInput(navController = navController)
+            }
         }
     }
 }
+
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FormularioInput(navController: NavController) {
     // State variables for form fields
     val currentUser = FirebaseAuth.getInstance().currentUser
+
+    val formEnviadoHoy=  remember { mutableStateOf(false) }
 
     val estadoAnimo = remember { mutableStateOf(3) } // 0-5
     val motivacion = remember { mutableStateOf(3) }
@@ -187,6 +225,9 @@ fun FormularioInput(navController: NavController) {
 
         item {
             EnviarFormularioButton(
+
+                navHostController = navController,
+                formEnviadoHoy= formEnviadoHoy.value,
                 estadoAnimo = estadoAnimo.value, // .value para acceder al valor de MutableState
                 motivacion = motivacion.value,
                 trabajo = trabajo.value,
@@ -232,7 +273,9 @@ fun EstadoAnimoSelector(estadoAnimo: MutableState<Int>, onEstadoAnimoChange: (In
                     contentColor = Color.White
                 ),
                 shape = CircleShape,
-                modifier = Modifier.size(70.dp).padding(8.dp)
+                modifier = Modifier
+                    .size(70.dp)
+                    .padding(8.dp)
             ) {
                 Text(
                     text = "$index",
@@ -361,7 +404,9 @@ fun EmocionesSelection(emociones: MutableList<String>) {
     Text("Selecciona tus emociones actuales:", style = MaterialTheme.typography.bodyMedium)
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         val emocionesList = listOf(
@@ -450,6 +495,8 @@ fun TextInputField(label: String, value: String, onValueChange: (String) -> Unit
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EnviarFormularioButton(
+    navHostController: NavController,
+    formEnviadoHoy: Boolean,
     estadoAnimo: Int,
     motivacion: Int,
     trabajo: Int,
@@ -470,12 +517,14 @@ fun EnviarFormularioButton(
     otrosComentarios: String,
     notaGlobal: Int
 ) {
+    val formEnviadoHoyState = remember { mutableStateOf(formEnviadoHoy) }
     Button(onClick = {
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
             val userId = currentUser.uid ?: "Usuario desconocido"
             val diaYHora = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+
             val formularioId = UUID.randomUUID().toString()
 
             // Log de datos básicos
@@ -506,13 +555,14 @@ fun EnviarFormularioButton(
 
             // Envío del formulario a Firestore
             val db = FirebaseFirestore.getInstance()
-            db.collection("usuarios")
+            db.collection("usuariosCRM")
                 .document(userId)
                 .collection("formulariosDiarios")
                 .document(formularioId)
                 .set(formulario)
                 .addOnSuccessListener {
                     Log.d("Formulario", "Formulario guardado con éxito para el usuario $userId")
+                    formEnviadoHoyState.value = true
                 }
                 .addOnFailureListener { e ->
                     Log.e("Formulario", "Error al guardar el formulario", e)
@@ -521,9 +571,14 @@ fun EnviarFormularioButton(
             // Manejo del caso donde no hay usuario autenticado
             Log.e("Formulario", "No hay usuario autenticado")
         }
+        navHostController.navigate("pantallaGraficos")
     }) {
         Text("Enviar")
     }
+    val formEnviadoFinal = formEnviadoHoyState.value
+    Log.e("Valor de formEnviado pasa pag", "hola $formEnviadoFinal")
+
+
 }
 
 
