@@ -407,7 +407,7 @@ fun MostrarImagenPerfil(opcion: String) {
                 modifier = Modifier.size(200.dp)
             )
     }
-}
+}*/
 
 
 fun ModificarDatosUsuario(
