@@ -122,6 +122,8 @@ fun PantallaPerfil(navController: NavHostController){
     }
 }
 
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MostrarDatosUsuario(){
@@ -332,7 +334,7 @@ fun MostrarDatosUsuario(){
 
 
 //----------FALTA LA ADAPTACION Y PONERLO EN UN ROW Y AÑADIRLE BIEN LA LOGICA 
-/*
+
 @Composable
 fun RadioButtonGenero(seleccion: (String) -> Unit) {
 

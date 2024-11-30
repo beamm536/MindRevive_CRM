@@ -12,12 +12,14 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -25,25 +27,54 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.appclass.myapplication.componentes.BottomNavigationBarComponent
+import com.appclass.myapplication.ui.theme.Purple40
 import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDate
 import java.time.YearMonth
 import java.util.Calendar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarioApp(navHostController: NavHostController) {
     val navController = rememberNavController() // Creamos un controlador de navegación
-    // Definimos las rutas de navegación. La ruta "calendar" lleva a la ventana del calendario,
-    // y la ruta "day/{day}" nos lleva a la ventana de un día específico.
-    NavHost(navController = navController, startDestination = "calendar") {
-        composable("calendar") { CalendarioPantalla(navController) } // Pantalla principal del calendario
-        composable("day/{day}") { backStackEntry ->
-            // Obtenemos el día de la para mostrar las citas correspondientes
-            val dia = backStackEntry.arguments?.getString("day")?.toInt() ?: 1
-            DiaCitas(dia) // Pantalla del día específico
+    Scaffold(
+        topBar = {
+            // Barra superior de la app (puedes personalizarla)
+            TopAppBar(
+                title = { Text("Calendario de Citas") },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.navigate("pantallaInicio")
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "ArrowBack"
+                        )
+                    }
+                }
+            )
+
+        },
+        content = { paddingValues -> // Se pasa paddingValues a la columna
+            Column(modifier = Modifier.padding(paddingValues)) {
+                // Definimos las rutas de navegación. La ruta "calendar" lleva a la ventana del calendario,
+                // y la ruta "day/{day}" nos lleva a la ventana de un día específico.
+                NavHost(navController = navController, startDestination = "calendar") {
+                    composable("calendar") { CalendarioPantalla(navController) } // Pantalla principal del calendario
+                    composable("day/{day}") { backStackEntry ->
+                        // Obtenemos el día de la para mostrar las citas correspondientes
+                        val dia = backStackEntry.arguments?.getString("day")?.toInt() ?: 1
+                        DiaCitas(dia) // Pantalla del día específico
+                    }
+                }
+            }
+        },
+        bottomBar = {
+            BottomNavigationBarComponent(navController = navController)
         }
-    }
+    )
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -95,6 +126,21 @@ fun CalendarioPantalla(navHostController: NavHostController) {
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp)
         ) {
+            listOf("L", "M", "X", "J", "V", "S", "D").forEach { diaSemana ->
+                item {
+                    Text(
+                        text = diaSemana,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Purple40,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.ExtraBold
+
+                    )
+                }
+            }
             for (dia in 1..diasMes) {
                 item {
                     // Para cada día, mostramos una celda que al hacer clic lleva a la pantalla del día

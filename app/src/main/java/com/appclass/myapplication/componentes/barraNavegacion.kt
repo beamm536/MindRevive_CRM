@@ -1,5 +1,6 @@
 package com.appclass.myapplication.componentes
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -7,11 +8,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.appclass.myapplication.R
 
 @Composable
 fun BottomNavigationBarComponent(navController: NavController) {
@@ -26,17 +29,29 @@ fun BottomNavigationBarComponent(navController: NavController) {
             val isSelected = item == selectedRoute
             NavigationBarItem(
                 icon = {
-                    Icon(
-                        imageVector = when (item) {
-                            "home" -> Icons.Default.Home
-                            "citas" -> Icons.Default.Call
-                            "form" -> Icons.Default.Edit
-                            "perfil" -> Icons.Default.Person
-                            else -> Icons.Default.Home
-                        },
-                        contentDescription = item,
-                        modifier = Modifier.size(if (isSelected) 30.dp else 24.dp)
-                    )
+                    when (item) {
+                        "home" -> Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = item,
+                            modifier = Modifier.size(if (isSelected) 30.dp else 24.dp)
+                        )
+                        "citas" -> Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = item,
+                            modifier = Modifier.size(if (isSelected) 30.dp else 24.dp)
+                        )
+                        "formulario" -> ImgIconoFormulario(modifier = Modifier.size(if (isSelected) 30.dp else 24.dp))
+                        "perfil" -> Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = item,
+                            modifier = Modifier.size(if (isSelected) 30.dp else 24.dp)
+                        )
+                        else -> Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = item,
+                            modifier = Modifier.size(if (isSelected) 30.dp else 24.dp)
+                        )
+                    }
                 },
                 label = {
                     Text(
@@ -45,7 +60,7 @@ fun BottomNavigationBarComponent(navController: NavController) {
                             "citas" -> "Citas"
                             "formulario" -> "Formulario"
                             "perfil" -> "Perfil"
-                            else -> ""
+                            else -> "-"
                         },
                         fontSize = if (isSelected) 12.sp else 10.sp,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
@@ -64,6 +79,14 @@ fun BottomNavigationBarComponent(navController: NavController) {
             )
         }
     }
+}
+
+@Composable
+fun ImgIconoFormulario(modifier: Modifier = Modifier){
+    Image(
+        painter = painterResource(id = R.drawable.iconoformulario),
+        contentDescription = "iconoFormulario",
+    )
 }
 /*
 @Composable
