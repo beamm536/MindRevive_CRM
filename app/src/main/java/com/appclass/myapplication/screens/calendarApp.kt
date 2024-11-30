@@ -25,25 +25,42 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.appclass.myapplication.componentes.BottomNavigationBarComponent
 import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDate
 import java.time.YearMonth
 import java.util.Calendar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarioApp(navHostController: NavHostController) {
     val navController = rememberNavController() // Creamos un controlador de navegación
-    // Definimos las rutas de navegación. La ruta "calendar" lleva a la ventana del calendario,
-    // y la ruta "day/{day}" nos lleva a la ventana de un día específico.
-    NavHost(navController = navController, startDestination = "calendar") {
-        composable("calendar") { CalendarioPantalla(navController) } // Pantalla principal del calendario
-        composable("day/{day}") { backStackEntry ->
-            // Obtenemos el día de la para mostrar las citas correspondientes
-            val dia = backStackEntry.arguments?.getString("day")?.toInt() ?: 1
-            DiaCitas(dia) // Pantalla del día específico
+    Scaffold(
+        topBar = {
+            // Barra superior de la app (puedes personalizarla)
+            TopAppBar(
+                title = { Text("Calendario de Citas") },
+            )
+        },
+        content = { paddingValues -> // Se pasa paddingValues a la columna
+            Column(modifier = Modifier.padding(paddingValues)) {
+                // Definimos las rutas de navegación. La ruta "calendar" lleva a la ventana del calendario,
+                // y la ruta "day/{day}" nos lleva a la ventana de un día específico.
+                NavHost(navController = navController, startDestination = "calendar") {
+                    composable("calendar") { CalendarioPantalla(navController) } // Pantalla principal del calendario
+                    composable("day/{day}") { backStackEntry ->
+                        // Obtenemos el día de la para mostrar las citas correspondientes
+                        val dia = backStackEntry.arguments?.getString("day")?.toInt() ?: 1
+                        DiaCitas(dia) // Pantalla del día específico
+                    }
+                }
+            }
+        },
+        bottomBar = {
+            BottomNavigationBarComponent(navController = navController)
         }
-    }
+    )
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

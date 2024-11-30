@@ -45,7 +45,7 @@ fun BottomNavigationBarComponent(navController: NavController) {
                             "citas" -> "Citas"
                             "formulario" -> "Formulario"
                             "perfil" -> "Perfil"
-                            else -> ""
+                            else -> "-"
                         },
                         fontSize = if (isSelected) 12.sp else 10.sp,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
