@@ -53,8 +53,9 @@ fun NavigationWrapper(navHostController: NavHostController) {
         //BARRA DE NAVEGACION -- COMPONENTE
         composable("home") { PantallaInicio(navHostController) }
         composable("citas") { CalendarioApp(navHostController) }
-        composable("formulario") { PantallaGraficos(navHostController) }
+        composable("formulario") { Questionario(navHostController) }
         composable("perfil"){ PantallaPerfil(navHostController) }
+        composable("graficos"){PantallaGraficos(navHostController) }
 
         composable("inicioAppCRM"){ InicioAppCRM (navHostController)}
         composable("registroUsuario"){ RegistroUsuario (navHostController) }
