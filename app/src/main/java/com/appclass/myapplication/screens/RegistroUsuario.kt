@@ -1,5 +1,7 @@
 package com.appclass.myapplication.screens
 
+import android.app.AlertDialog
+import android.content.Context
 import android.util.Log
 import android.widget.Space
 import android.widget.Toast
@@ -327,7 +329,7 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
                     ).show()
 
                     //REDIRECCION DENTRO DE LA APP
-                    navController.navigate("pantallaInicio")
+                    //navController.navigate("pantallaInicio")
 
                     OnclickBtnRegistrar(
                         nombre = nombre,
@@ -336,7 +338,9 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
                         email = email,
                         password = password,
                         confirmPassword = confirmPassword,
-                        onError = { message -> errorMessage = message }
+                        onError = { message -> errorMessage = message },
+                        navController = NavController(contextoApp)
+
                     )
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -361,6 +365,7 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
 
 
 
+
 //ESTA FUNCION NO ES COMPOSABLE!!
 fun OnclickBtnRegistrar(
     nombre: String,
@@ -369,7 +374,8 @@ fun OnclickBtnRegistrar(
     email: String,
     password: String,
     confirmPassword: String,
-    onError: (String) -> Unit
+    onError: (String) -> Unit,
+    navController: NavController
 ){
 
 
@@ -379,47 +385,80 @@ fun OnclickBtnRegistrar(
 
 
     if (password == confirmPassword && nombre.isNotEmpty() && email.isNotEmpty()) {
-        auth.createUserWithEmailAndPassword(email, password)//crea al usuario y deberia guardarlo en firebaseAUTH
+
+        //para no repetir el correo a la hora de la crear la cuenta
+        dbFirestore.collection("usuariosCRM")
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    //mensaje de q el correo ya esta registrado
+                    Log.w("Registro", "Correo duplicado detectado: $email")
+                    onError("El correo ya está registrado.")
+
+                } else {//sino creamos cuenta
+
+                    Log.d("Registro", "Correo no registrado previamente, creando cuenta en Auth...")
+
+                    auth.createUserWithEmailAndPassword(
+                        email,
+                        password
+                    )//crea al usuario y deberia guardarlo en firebaseAUTH
 
 
+                        //segun el resultado q nos ha dado el registro, es decir si se ha cumplido la condicion de los campos
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) { //si ha sido exitoso
 
-            //segun el resultado q nos ha dado el registro, es decir si se ha cumplido la condicion de los campos
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) { //si ha sido exitoso
+                                var user = auth.currentUser
+                                user?.let {
+                                    //parametros ordenados
+                                    val datosUser = User(
+                                        uid = it.uid,
+                                        nombre = nombre,
+                                        apellidos = apellidos,
+                                        edad = edad,
+                                        email = email
+                                    )
 
-                    var user = auth.currentUser
-                    user?.let {
-                        //parametros ordenados
-                        val datosUser = User(
-                            uid = it.uid,
-                            nombre = nombre,
-                            apellidos = apellidos,
-                            edad = edad,
-                            email = email
-                        )
-
-                        dbFirestore.collection("usuariosCRM").document(it.uid).set(datosUser)
-                            .addOnSuccessListener {
-                                // Éxito al guardar en Firestore
-                                Log.d("Registro", "Usuario guardado exitosamente en Firestore")
+                                    dbFirestore.collection("usuariosCRM").document(it.uid)
+                                        .set(datosUser)
+                                        .addOnSuccessListener {
+                                            // Éxito al guardar en Firestore
+                                            Log.d(
+                                                "Registro",
+                                                "Usuario guardado exitosamente en Firestore"
+                                            )
+                                            navController.navigate("pantallaInicio")
+                                        }
+                                        .addOnFailureListener {
+                                            // Manejo de errores al guardar en Firestore
+                                            Log.e(
+                                                "Registro",
+                                                "Error al guardar usuario en Firestore: ${it.message}"
+                                            )
+                                        }
+                                }
+                            } else {
+                                // Manejo de errores al crear el usuario en Auth
+                                onError("Error al registrar usuario: ${task.exception?.message}")
                             }
-                            .addOnFailureListener {
-                                // Manejo de errores al guardar en Firestore
-                                Log.e("Registro", "Error al guardar usuario en Firestore: ${it.message}")
-                            }
-                    }
-
-
-                } else {
-                    // Manejo de errores al crear el usuario en Auth
-                    onError ("usurio no autenticado")
+                        }
                 }
             }
+            .addOnFailureListener { e ->
+                // Manejo de errores al consultar Firestore
+                onError("Error al consultar Firestore: ${e.message}")
+            }
+
     } else {
         // Mostrar mensaje de error si las contraseñas no coinciden o si los campos están vacíos
-        onError ("Las contraseñas no coinciden o hay campos vacíos")
+        onError("Las contraseñas no coinciden o hay campos vacíos.")
     }
 }
+
+
+
 
 @Composable
 fun ErrorPasswordNumCaracteres(
