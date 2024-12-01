@@ -29,6 +29,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.appclass.myapplication.componentes.BottomNavigationBarComponent
 import com.appclass.myapplication.ui.theme.Purple40
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDate
 import java.time.YearMonth
@@ -87,6 +88,7 @@ fun CalendarioPantalla(navHostController: NavHostController) {
     val coleccion = "citas" // Nombre de la colección de citas
     var citas by remember { mutableStateOf<List<Citas>>(emptyList()) } // Lista para almacenar las citas
     var diasConCitas by remember { mutableStateOf<Set<Int>>(emptySet()) } // Conjunto para almacenar los días con citas
+    val uidUsuario = FirebaseAuth.getInstance().currentUser?.uid
 
     // Recuperar todas las citas del mes
     LaunchedEffect(mesActual) {
@@ -258,6 +260,7 @@ fun DiaCasilla(dia: Int, diaActual: Boolean, tieneCita: Boolean, onClick: () -> 
 fun DiaCitas(dia: Int) {
     val db = FirebaseFirestore.getInstance()
     val coleccion = "citas"
+    val auth = FirebaseAuth.getInstance()  // Instancia de FirebaseAuth para obtener el UID del usuario
     var nombre by remember { mutableStateOf("") }
     var medico by remember { mutableStateOf("") }
     var hora by remember { mutableStateOf("") }
@@ -330,12 +333,20 @@ fun DiaCitas(dia: Int) {
                     return@Button
                 }
 
+                val userUid = auth.currentUser?.uid // Obtén el UID del usuario actual
+
+                if (userUid == null) {
+                    mensaje = "Usuario no autenticado. No se puede guardar la cita."
+                    return@Button
+                }
+
                 // Datos que se enviarán a Firestore
                 val datos = hashMapOf(
                     "nombre" to nombre,
                     "medico" to medico,
                     "dia" to dia.toString(),
-                    "hora" to hora
+                    "hora" to hora,
+                    "uid" to userUid  // Agregar el UID del usuario
                 )
 
                 if (editada && editandoCitaId != null) {
@@ -426,4 +437,3 @@ fun cargarCitas(dia: Int, db: FirebaseFirestore, coleccion: String, onCitasLoade
         .addOnFailureListener {
         }
 }
-
