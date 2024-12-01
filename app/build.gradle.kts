@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
 
+
+
     id("com.google.gms.google-services")
 }
 
@@ -75,6 +77,12 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
 
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    //implementation("com.jjoe64:graphview:4.2.2")
+
 }
+
