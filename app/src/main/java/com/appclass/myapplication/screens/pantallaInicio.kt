@@ -89,26 +89,37 @@ fun PantallaInicio(navController: NavHostController) {
     var citasDelMes by remember { mutableStateOf<List<String>>(emptyList()) }
     var loading by remember { mutableStateOf(true) }
 
-    // Obtenemos las citas del Firestore
+// Obtenemos las citas del Firestore
     LaunchedEffect(Unit) {
         // Referenciamos a la base de datos de Firebase
         val db = FirebaseFirestore.getInstance()
 
-        // Obtención de los documentos de la colección "citas"
-        val citas = db.collection("citas")
-            .get() // Llamada asíncrona para obtener las citas
-            .await() // Esperamos a que la operación termine
+        // Obtenemos el UID del usuario actual
+        val uidUsuarioActual = FirebaseAuth.getInstance().currentUser?.uid
 
-        // Asignamos los datos de las citas en la lista
-        citasDelMes = citas.documents.map {
-            val dia = it.getString("dia") ?: "Sin día"  // Obtenemos el día de la cita
-            val hora = it.getString("hora") ?: "Sin hora"  // Obtenemos la hora de la cita
-            "Dia: $dia - Hora: $hora"  // Combinamos día y hora en un solo texto
+        // Comprobamos si el UID es nulo (usuario no autenticado)
+        if (uidUsuarioActual != null) {
+            // Obtención de los documentos de la colección "citas", filtrados por el usuario
+            val citas = db.collection("citas")
+                .whereEqualTo("usuario", uidUsuarioActual) // Filtramos por el campo "usuario"
+                .get() // Llamada asíncrona para obtener las citas
+                .await() // Esperamos a que la operación termine
+
+            // Asignamos los datos de las citas en la lista
+            citasDelMes = citas.documents.map {
+                val dia = it.getString("dia") ?: "Sin día"  // Obtenemos el día de la cita
+                val hora = it.getString("hora") ?: "Sin hora"  // Obtenemos la hora de la cita
+                "Dia: $dia - Hora: $hora"  // Combinamos día y hora en un solo texto
+            }
+        } else {
+            // Si el UID es nulo, significa que no hay usuario autenticado
+            citasDelMes = emptyList()
         }
 
         // Al finalizar, cambiamos el estado de loading a false
         loading = false
     }
+
 
     // Lista de recomendaciones del psicólogo (fijas)
     val recomendacionesPsicologo = listOf(
