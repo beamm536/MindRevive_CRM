@@ -5,5 +5,6 @@ data class Citas(
     val nombre: String = "",
     val medico: String = "",
     val dia: String = "",
-    val hora: String = ""
+    val hora: String = "",
+    val usuario: String =""//uid
 )
