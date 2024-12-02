@@ -1,6 +1,7 @@
 package com.appclass.myapplication.screens
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -29,6 +30,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.appclass.myapplication.componentes.BottomNavigationBarComponent
 import com.appclass.myapplication.ui.theme.Purple40
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.time.LocalDate
 import java.time.YearMonth
@@ -87,26 +89,63 @@ fun CalendarioPantalla(navHostController: NavHostController) {
     val coleccion = "citas" // Nombre de la colección de citas
     var citas by remember { mutableStateOf<List<Citas>>(emptyList()) } // Lista para almacenar las citas
     var diasConCitas by remember { mutableStateOf<Set<Int>>(emptySet()) } // Conjunto para almacenar los días con citas
+    val uidUsuarioActual = FirebaseAuth.getInstance().currentUser?.uid
+
+    // Recuperar todas las citas del mes
+//    LaunchedEffect(mesActual) {
+//        if (uidUsuarioActual != null) {
+//            db.collection(coleccion)
+//                .whereGreaterThanOrEqualTo("dia", "1") // Aseguramos que recuperamos citas desde el día 1
+//                .whereLessThanOrEqualTo("dia", diasMes.toString()) // Hasta el último día del mes
+//                .get()
+//                .addOnSuccessListener { documents ->
+//                    // Convertimos los documentos de Firestore en objetos Citas
+//                    val listaCitas = documents.mapNotNull { doc ->
+//                        doc.toObject(Citas::class.java)
+//                    }
+//                    // Filtramos las citas que pertenecen al usuario actual
+//                    val citasUsuario = listaCitas.filter { it.usuario == uidUsuarioActual }
+//                    citas = citasUsuario.sortedBy { it.dia.toInt() } // Ordenamos las citas por día
+//                    // Guardamos los días que tienen citas del usuario actual
+//                    diasConCitas = citasUsuario.map { it.dia.toInt() }.toSet()
+//                    Log.d("CitasUsuario", citasUsuario.toString())
+//                }
+//                .addOnFailureListener {
+//                    // Manejo de error si no se pueden cargar las citas
+//                }
+//        }
+//    }
 
     // Recuperar todas las citas del mes
     LaunchedEffect(mesActual) {
-        db.collection(coleccion)
-            .whereGreaterThanOrEqualTo("dia", "1") // Aseguramos que recuperamos citas desde el día 1
-            .whereLessThanOrEqualTo("dia", diasMes.toString()) // Hasta el último día del mes
-            .get()
-            .addOnSuccessListener { documents ->
-                // Convertimos los documentos de Firestore en objetos Citas
-                val listaCitas = documents.mapNotNull { doc ->
-                    doc.toObject(Citas::class.java)
+        if (uidUsuarioActual != null) {
+            db.collection(coleccion)
+                .whereGreaterThanOrEqualTo("dia", "1") // Aseguramos que recuperamos citas desde el día 1
+                .whereLessThanOrEqualTo("dia", diasMes.toString()) // Hasta el último día del mes
+                .get()
+                .addOnSuccessListener { documents ->
+                    // Convertimos los documentos de Firestore en objetos Citas
+                    val listaCitas = documents.mapNotNull { doc ->
+                        doc.toObject(Citas::class.java)
+                    }
+
+                    // Filtramos las citas que pertenecen al usuario actual
+                    val citasUsuario = listaCitas.filter { it.usuario == uidUsuarioActual }
+
+                    // Formatear el día a dos dígitos (asegura que siempre tenga dos dígitos)
+                    citas = citasUsuario.sortedBy { it.dia.padStart(2, '0').toInt() }
+
+                    // Guardamos los días que tienen citas del usuario actual
+                    diasConCitas = citasUsuario.map { it.dia.padStart(2, '0').toInt() }.toSet()
+                    Log.d("CitasUsuario", citasUsuario.toString())
                 }
-                citas = listaCitas.sortedBy { it.dia.toInt() } // Ordenamos las citas por día
-                // Guardamos los días que tienen citas
-                diasConCitas = listaCitas.map { it.dia.toInt() }.toSet()
-            }
-            .addOnFailureListener {
-                // Manejo de error si no se pueden cargar las citas
-            }
+                .addOnFailureListener {
+                    // Manejo de error si no se pueden cargar las citas
+                }
+        }
     }
+
+
 
     Column(modifier = Modifier.fillMaxSize()) {
         // Título con el mes y el año actual
@@ -258,6 +297,7 @@ fun DiaCasilla(dia: Int, diaActual: Boolean, tieneCita: Boolean, onClick: () -> 
 fun DiaCitas(dia: Int) {
     val db = FirebaseFirestore.getInstance()
     val coleccion = "citas"
+    val auth = FirebaseAuth.getInstance()  // Instancia de FirebaseAuth para obtener el UID del usuario
     var nombre by remember { mutableStateOf("") }
     var medico by remember { mutableStateOf("") }
     var hora by remember { mutableStateOf("") }
@@ -330,12 +370,30 @@ fun DiaCitas(dia: Int) {
                     return@Button
                 }
 
+                val userUid = auth.currentUser?.uid // Obtén el UID del usuario actual
+
+                if (userUid == null) {
+                    mensaje = "Usuario no autenticado. No se puede guardar la cita."
+                    return@Button
+                }
+
+                // Formatea el día con 2 dígitos
+                //val diaFormateado = String.format("%02d", dia)  // Esto asegura que el día tenga dos dígitos
+                // "%02d" es el formato que le decimos a String.format():
+                //  - "%" indica el inicio de un especificador de formato.
+                //  - "0" le dice que, si el número tiene menos de 2 dígitos, lo rellene con ceros a la izquierda.
+                //  - "2" le indica que debe asegurarse de que el número tenga al menos 2 dígitos.
+                //  - "d" significa que estamos tratando con un número entero (día en este caso).
+                // Si el día es 1, el formato lo convertirá a "01". Si el día es 10, lo dejará como "10".
+
+
                 // Datos que se enviarán a Firestore
                 val datos = hashMapOf(
                     "nombre" to nombre,
                     "medico" to medico,
                     "dia" to dia.toString(),
-                    "hora" to hora
+                    "hora" to hora,
+                    "usuario" to userUid  // Agregar el UID del usuario
                 )
 
                 if (editada && editandoCitaId != null) {
@@ -426,4 +484,3 @@ fun cargarCitas(dia: Int, db: FirebaseFirestore, coleccion: String, onCitasLoade
         .addOnFailureListener {
         }
 }
-
