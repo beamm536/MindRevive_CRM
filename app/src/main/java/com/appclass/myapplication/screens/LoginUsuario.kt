@@ -241,6 +241,6 @@ fun LlamadaFinal(navController: NavController, modifier: Modifier = Modifier){
     //llamada :)
     LoginScreen(navController = navController,onLoginSuccess = {//solo llamamos a esta funcion q es la q tiene algo q mostrar al usuario
         //redirigir al usuario a otra pantalla
-        navController.navigate("pantallaInicio")
+        navController.navigate("buttonAddFormsUser")
     })
 }
