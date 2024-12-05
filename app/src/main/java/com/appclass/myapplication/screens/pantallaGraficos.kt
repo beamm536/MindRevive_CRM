@@ -165,10 +165,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.appclass.myapplication.componentes.BottomNavigationBarComponent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
@@ -180,24 +178,19 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.utils.ColorTemplate
-import android.graphics.Color as AndroidColor
 
 import androidx.compose.ui.viewinterop.AndroidView
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.github.mikephil.charting.highlight.Highlight
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.rememberScrollState
 import androidx.navigation.NavController
+import com.appclass.myapplication.componentes.BottomNavigationBarComponent
 
 //import com.jjoe64.graphview.GraphView
 //import com.jjoe64.graphview.series.DataPoint
@@ -225,7 +218,9 @@ fun PantallaGraficos(navController: NavHostController) {
                 title = { Text("Pantalla de Gráficos") }
             )
         },
-        bottomBar = { }
+        bottomBar = {
+            BottomNavigationBarComponent(navController = navController)
+        }
     ) {paddingValues ->
         Column(
             modifier = Modifier
@@ -243,27 +238,71 @@ fun PantallaGraficos(navController: NavHostController) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PaginaGraficos(navController: NavController, data: List<Formulario>, data2: List<Formulario>) {
-    // Mostrar los datos de los últimos 30 días y 7 días
-    Text(text = "Como te has sentido los últimos días", style = MaterialTheme.typography.titleMedium)
-    Spacer(modifier = Modifier.height(16.dp))
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()) // Desplazamiento de toda la caja
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Título
+            Text(
+                text = "Cómo te has sentido los últimos días",
+                style = MaterialTheme.typography.titleMedium
+            )
 
-    // Mostrar el gráfico de barras con los datos de los últimos 7 días
-    if (data2.isNotEmpty()) {
-        Text(text = "Nota global de la última semana", style = MaterialTheme.typography.bodyMedium)
-        DisplayMoodBarChart(data2 = data2)  // Usamos los datos de los últimos 7 días
-    }
-    // Mostrar el gráfico circular con los datos de los últimos 7 días
-    if (data2.isNotEmpty()) {
-        Text(text = "Como has dormido la última semana", style = MaterialTheme.typography.bodyMedium)
-        DisplaySleepQualityPieChart(data2 = data2)  // Usamos los datos de los últimos 7 días
-    }
+            // Si hay datos en data2, mostrar los gráficos
+            if (data2.isNotEmpty()) {
+                Text(
+                    text = "Nota global de la última semana",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                // Gráfico de barras con tamaño limitado
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp)
+                ) {
+                    DisplayMoodBarChart(data2 = data2.take(8), modifier = Modifier.fillMaxSize()) // Gráfico de barras
+                }
 
-    // Mostrar el calendario con los datos de los últimos 30 días
-    if (data.isNotEmpty()) {
-        Text(text = "Estado de ánimo el último mes", style = MaterialTheme.typography.bodyMedium)
-        Last30DaysCalendar(data = data)  // Usamos los datos de los últimos 30 días
+                Text(
+                    text = "Cómo has dormido la última semana",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                // Gráfico circular con tamaño limitado
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp)
+                ) {
+                    DisplaySleepQualityPieChart(data2 = data2.take(8), modifier = Modifier.fillMaxSize()) // Gráfico circular
+                }
+            }
+
+            // Si hay datos en data, mostrar el calendario de los últimos 30 días
+            if (data.isNotEmpty()) {
+                Text(
+                    text = "Estado de ánimo el último mes",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp)
+                ) {
+                    Last30DaysCalendar(data = data) // Calendario de los últimos 30 días
+                }
+            }
+        }
     }
 }
+
+
+
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -384,7 +423,7 @@ suspend fun getDataFromFirestore2(): List<Formulario> {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DisplayMoodBarChart(data2: List<Formulario>) {
+fun DisplayMoodBarChart(data2: List<Formulario>, modifier: Modifier) {
     // Convertir los datos a las entradas necesarias para el gráfico de barras
     val entries = data2.mapIndexed { index, formulario ->
         BarEntry((data2.size - 1 - index).toFloat(), formulario.notaGlobal.toFloat()) // Usamos notaGlobal aquí
@@ -461,7 +500,7 @@ fun DisplayMoodBarChart(data2: List<Formulario>) {
 }
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DisplaySleepQualityPieChart(data2: List<Formulario>) {
+fun DisplaySleepQualityPieChart(data2: List<Formulario>, modifier: Modifier) {
     // Contadores para cada calidad de sueño
     val sleepQualityCounts = mutableMapOf(
         "Muy mal" to 0,

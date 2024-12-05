@@ -1,72 +1,51 @@
 package com.example.vistasclientes
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.appclass.myapplication.componentes.BottomNavigationBarComponent
-import com.appclass.myapplication.screens.ButtonAddForms
-import com.appclass.myapplication.screens.CalendarioApp
-import com.appclass.myapplication.screens.Formulario
-
-import com.appclass.myapplication.screens.InicioAppCRM
-import com.appclass.myapplication.screens.LoginUsuario
-
-import com.appclass.myapplication.componentes.BottomNavigationBarComponent
-import com.appclass.myapplication.screens.ButtonAddForms2
-import com.appclass.myapplication.screens.CalendarioApp
-//import com.appclass.myapplication.screens.EntradaApp
-import com.appclass.myapplication.screens.InicioAppCRM
-import com.appclass.myapplication.screens.PantallaInicio
-//import com.appclass.pruebasautentificacion.screens.LoginUsuario
-import com.appclass.myapplication.screens.RegistroUsuario
-import com.appclass.myapplication.screens.LoginUsuario
-import com.appclass.myapplication.screens.PantallaGraficos
-
-import com.appclass.myapplication.screens.PantallaInicio
-
-import com.appclass.myapplication.screens.PantallaPerfil
-
-import com.appclass.myapplication.screens.Questionario
-import com.appclass.myapplication.screens.RegistroUsuario
-import com.google.firebase.firestore.FirebaseFirestore
-import java.time.LocalDate
-import java.util.UUID
-
-
-//import com.appclass.pruebasautentificacion.screens.RegistroUsuario
-
+import androidx.navigation.compose.rememberNavController
+import com.appclass.myapplication.screens.* // Importación compacta de pantallas
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationWrapper(navHostController: NavHostController) {
 
+    // Configuración principal de navegación
+    NavHost(navController = navHostController, startDestination = "inicioAppCRM") {
 
-    NavHost(navController = navHostController, startDestination = "pantallaInicio") {
+        // Rutas principales
+        composable("inicioAppCRM") { InicioAppCRM(navHostController) }
+        composable("registroUsuario") { RegistroUsuario(navHostController) }
+        composable("loginUsuario") { LoginUsuario(navHostController) }
 
-        composable("pantallaInicio") { PantallaInicio(navHostController) }
-
-
-        //BARRA DE NAVEGACION -- COMPONENTE
+        // Rutas de navegación de la barra inferior
         composable("home") { PantallaInicio(navHostController) }
-        composable("citas") { CalendarioApp(navHostController) }
+        composable("citas") { CalendarioPantalla(navHostController) }
         composable("formulario") { Questionario(navHostController) }
-        composable("perfil"){ PantallaPerfil(navHostController) }
-        composable("graficos"){PantallaGraficos(navHostController) }
+        composable("perfil") { PantallaPerfil(navHostController) }
+        composable("graficos") { PantallaGraficos(navHostController) }
 
-        composable("inicioAppCRM"){ InicioAppCRM (navHostController)}
-        composable("registroUsuario"){ RegistroUsuario (navHostController) }
-        composable("loginUsuario"){ LoginUsuario (navHostController) }
-
-        composable("calendarApp"){ CalendarioApp (navHostController) }
-
-        composable("PantallaFormulario"){ Questionario (navHostController) }
-        composable("pantallaGraficos") { PantallaGraficos(navHostController) }
-        //para añadir los 29 días antes creo
+        // Otras rutas específicas
         composable("buttonAddFormsUser") { ButtonAddForms2(navHostController) }
+        composable("pantallaInicio") { PantallaInicio(navHostController) }
+        composable("PantallaFormulario") { Questionario(navHostController) }
+        composable("pantallaGraficos") { PantallaGraficos(navHostController) }
 
-        composable("pantallaPerfil"){ PantallaPerfil(navHostController) }
-}}
+        // Aquí se inicializa un segundo controlador de navegación para el calendario
+        composable("calendar") {
+            // Este controlador de navegación es específico para las pantallas de calendario
+            val calendarNavController = rememberNavController()
+            CalendarioPantalla(calendarNavController)
+        }
+
+        // Ruta dinámica para un día específico
+        composable("day/{day}") { backStackEntry ->
+            val dia = backStackEntry.arguments?.getString("day")?.toIntOrNull() ?: 1
+            DiaCitas(dia)
+        }
+    }
+}
