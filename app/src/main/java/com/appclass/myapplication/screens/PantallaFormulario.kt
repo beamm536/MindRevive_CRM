@@ -5,22 +5,31 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
@@ -50,6 +59,15 @@ import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.BasicText
+
+import androidx.compose.ui.unit.dp
+
+
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -156,23 +174,23 @@ fun FormularioInput(navController: NavController) {
         }
 
         item {
-            SliderWithLabel3(label = "Trabajo", value = trabajo.value, onValueChange = { trabajo.value = it })
+            SliderWithLabel3(label = "Trabajo(h dedicadas)", value = trabajo.value, onValueChange = { trabajo.value = it })
         }
 
         item {
-            SliderWithLabel3(label = "Descanso", value = descanso.value, onValueChange = { descanso.value = it })
+            SliderWithLabel3(label = "Descanso(h dedicadas)", value = descanso.value, onValueChange = { descanso.value = it })
         }
 
         item {
-            SliderWithLabel3(label = "Ejercicio", value = ejercicio.value, onValueChange = { ejercicio.value = it })
+            SliderWithLabel3(label = "Ejercicio(h dedicadas)", value = ejercicio.value, onValueChange = { ejercicio.value = it })
         }
 
         item {
-            SliderWithLabel3(label = "Social", value = social.value, onValueChange = { social.value = it })
+            SliderWithLabel3(label = "Social(h dedicadas)", value = social.value, onValueChange = { social.value = it })
         }
 
         item {
-            SliderWithLabel3(label = "Hobbies", value = hobbies.value, onValueChange = { hobbies.value = it })
+            SliderWithLabel3(label = "Hobbies(h dedicadas)", value = hobbies.value, onValueChange = { hobbies.value = it })
         }
 
         item {
@@ -287,115 +305,462 @@ fun EstadoAnimoSelector(estadoAnimo: MutableState<Int>, onEstadoAnimoChange: (In
     }
 }
 
+//@Composable
+//fun SliderWithLabel(label: String, value: Int, onValueChange: (Int) -> Unit) {
+//    // Display the label and current value of the slider
+//    Text("$label: $value")
+//
+//    // Log when the slider value changes
+//    Slider(
+//        value = value.toFloat(),
+//        onValueChange = { newValue ->
+//            // Log the change to Logcat
+//            Log.d("Formulario", "$label cambiado a: $newValue")
+//            onValueChange(newValue.toInt())
+//        },
+//        valueRange = 0f..5f,
+//        steps = 23
+//    )
+//}
 @Composable
 fun SliderWithLabel(label: String, value: Int, onValueChange: (Int) -> Unit) {
-    // Display the label and current value of the slider
-    Text("$label: $value")
-
-    // Log when the slider value changes
-    Slider(
-        value = value.toFloat(),
-        onValueChange = { newValue ->
-            // Log the change to Logcat
-            Log.d("Formulario", "$label cambiado a: $newValue")
-            onValueChange(newValue.toInt())
-        },
-        valueRange = 0f..5f,
-        steps = 23
-    )
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        Text(
+            text = "$label: $value",
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.Black
+        )
+        Slider(
+            value = value.toFloat(),
+            onValueChange = { newValue ->
+                Log.d("Formulario", "$label cambiado a: $newValue")
+                onValueChange(newValue.toInt())
+            },
+            valueRange = 0f..5f,
+            steps = 4, // Reducir a 4 pasos para simplificar
+            colors = SliderDefaults.colors(
+                thumbColor = Color(0xFF6F67FA),
+                activeTrackColor = Color(0xFF6F67FA)
+            ),
+            modifier = Modifier.width(200.dp) // Controlar el tamaño para ajustarlo al diseño
+        )
+    }
 }
+
+
+//@Composable
+//fun SliderWithLabel2(label: String, value: Int, onValueChange: (Int) -> Unit) {
+//    // Display the label and current value of the slider
+//    Text("$label: $value")
+//
+//    // Log when the slider value changes
+//    Slider(
+//        value = value.toFloat(),
+//        onValueChange = { newValue ->
+//            // Log the change to Logcat
+//            Log.d("Formulario", "$label cambiado a: $newValue")
+//            onValueChange(newValue.toInt())
+//        },
+//        valueRange = 0f..10f,
+//        steps = 23
+//    )
+//}
 
 @Composable
 fun SliderWithLabel2(label: String, value: Int, onValueChange: (Int) -> Unit) {
-    // Display the label and current value of the slider
-    Text("$label: $value")
-
-    // Log when the slider value changes
-    Slider(
-        value = value.toFloat(),
-        onValueChange = { newValue ->
-            // Log the change to Logcat
-            Log.d("Formulario", "$label cambiado a: $newValue")
-            onValueChange(newValue.toInt())
-        },
-        valueRange = 0f..10f,
-        steps = 23
-    )
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        Text(
+            text = "$label: $value",
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.Black
+        )
+        Slider(
+            value = value.toFloat(),
+            onValueChange = { newValue ->
+                Log.d("Formulario", "$label cambiado a: $newValue")
+                onValueChange(newValue.toInt())
+            },
+            valueRange = 0f..10f,
+            steps = 9, // Ajustado para reflejar pasos iguales (0 a 10)
+            colors = SliderDefaults.colors(
+                thumbColor = Color(0xFF6F67FA),
+                activeTrackColor = Color(0xFF6F67FA)
+            ),
+            modifier = Modifier.width(200.dp) // Tamaño controlado para mantener proporciones
+        )
+    }
 }
+
+//@Composable
+//fun SliderWithLabel3(label: String, value: Int, onValueChange: (Int) -> Unit) {
+//    // Display the label and current value of the slider
+//    Text("$label: $value")
+//
+//    // Log when the slider value changes
+//    Slider(
+//        value = value.toFloat(),
+//        onValueChange = { newValue ->
+//            // Log the change to Logcat
+//            Log.d("Formulario", "$label cambiado a: $newValue")
+//            onValueChange(newValue.toInt())
+//        },
+//        valueRange = 0f..24f,
+//        steps = 23
+//    )
+//}
+
 @Composable
 fun SliderWithLabel3(label: String, value: Int, onValueChange: (Int) -> Unit) {
-    // Display the label and current value of the slider
-    Text("$label: $value")
-
-    // Log when the slider value changes
-    Slider(
-        value = value.toFloat(),
-        onValueChange = { newValue ->
-            // Log the change to Logcat
-            Log.d("Formulario", "$label cambiado a: $newValue")
-            onValueChange(newValue.toInt())
-        },
-        valueRange = 0f..24f,
-        steps = 23
-    )
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        Text(
+            text = "$label: $value",
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.Black
+        )
+        Slider(
+            value = value.toFloat(),
+            onValueChange = { newValue ->
+                Log.d("Formulario", "$label cambiado a: $newValue")
+                onValueChange(newValue.toInt())
+            },
+            valueRange = 0f..24f,
+            steps = 23, // Manteniendo los pasos especificados
+            colors = SliderDefaults.colors(
+                thumbColor = Color(0xFF6F67FA),
+                activeTrackColor = Color(0xFF6F67FA)
+            ),
+            modifier = Modifier.width(200.dp) // Controla el ancho para mantener un diseño limpio
+        )
+    }
 }
 
+
+//@Composable
+//fun WeatherSelection(selectedWeather: MutableState<String>) {
+//    Log.d("Formulario", "Opción de clima seleccionada: ${selectedWeather.value}")
+//
+//    Text(
+//        "Selecciona las condiciones meteorológicas:",
+//        style = MaterialTheme.typography.bodyMedium
+//    )
+//
+//    Column(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(top = 8.dp),
+//        verticalArrangement = Arrangement.spacedBy(16.dp)
+//    ) {
+//        // Primera fila con tres botones
+//        Row(
+//            modifier = Modifier.fillMaxWidth(),
+//            horizontalArrangement = Arrangement.spacedBy(8.dp)
+//        ) {
+//            WeatherButton(weatherType = "Soleado", selectedWeather = selectedWeather)
+//            WeatherButton(weatherType = "Nublado", selectedWeather = selectedWeather)
+//            WeatherButton(weatherType = "Lluvia", selectedWeather = selectedWeather)
+//        }
+//
+//        // Segunda fila con tres botones
+//        Row(
+//            modifier = Modifier.fillMaxWidth(),
+//            horizontalArrangement = Arrangement.spacedBy(8.dp)
+//        ) {
+//            WeatherButton(weatherType = "Tormenta", selectedWeather = selectedWeather)
+//            WeatherButton(weatherType = "Niebla", selectedWeather = selectedWeather)
+//            WeatherButton(weatherType = "Nieve", selectedWeather = selectedWeather)
+//        }
+//    }
+//}
+
+//@Composable
+//fun WeatherSelection(selectedWeather: MutableState<String>) {
+//    Log.d("Formulario", "Opción de clima seleccionada: ${selectedWeather.value}")
+//
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(16.dp),
+//        verticalArrangement = Arrangement.spacedBy(16.dp),
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        Text(
+//            "Selecciona las condiciones meteorológicas:",
+//            style = MaterialTheme.typography.bodyMedium,
+//            color = Color(0xFF6F67FA)
+//        )
+//
+//        Box(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(200.dp) // Altura fija para evitar restricciones infinitas
+//        ) {
+//            LazyVerticalGrid(
+//                columns = GridCells.Fixed(3),
+//                modifier = Modifier.fillMaxSize(),
+//                contentPadding = PaddingValues(8.dp),
+//                horizontalArrangement = Arrangement.spacedBy(8.dp),
+//                verticalArrangement = Arrangement.spacedBy(8.dp)
+//            ) {
+//                val weatherOptions = listOf("Soleado", "Nublado", "Lluvia", "Tormenta", "Niebla", "Nieve")
+//                items(weatherOptions.size) { index ->
+//                    WeatherButton(
+//                        weatherType = weatherOptions[index],
+//                        selectedWeather = selectedWeather
+//                    )
+//                }
+//            }
+//        }
+//    }
+//}
+//@Composable
+//fun WeatherSelection(selectedWeather: MutableState<String>) {
+//    Log.d("Formulario", "Opción de clima seleccionada: ${selectedWeather.value}")
+//
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(16.dp),
+//        verticalArrangement = Arrangement.spacedBy(16.dp),
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        Text(
+//            "Selecciona las condiciones meteorológicas:",
+//            style = MaterialTheme.typography.bodyMedium,
+//            color = Color(0xFF6F67FA)
+//        )
+//
+//        // Caja con tamaño controlado para el LazyVerticalGrid
+//        Box(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(200.dp) // Limita la altura de la caja
+//        ) {
+//            LazyVerticalGrid(
+//                columns = GridCells.Fixed(3),
+//                modifier = Modifier.fillMaxSize(),
+//                contentPadding = PaddingValues(8.dp),
+//                horizontalArrangement = Arrangement.spacedBy(8.dp),
+//                verticalArrangement = Arrangement.spacedBy(8.dp)
+//            ) {
+//                val weatherOptions = listOf("Soleado", "Nublado", "Lluvia", "Tormenta", "Niebla", "Nieve")
+//                items(weatherOptions.size) { index ->
+//                    WeatherButton(
+//                        weatherType = weatherOptions[index],
+//                        selectedWeather = selectedWeather,
+//                        modifier = Modifier.height(40.dp) // Ajuste de tamaño de los botones
+//                    )
+//                }
+//            }
+//        }
+//    }
+//}
+//@OptIn(ExperimentalLayoutApi::class)
+//@Composable
+//fun WeatherSelection(selectedWeather: MutableState<String>) {
+//    Log.d("Formulario", "Opción de clima seleccionada: ${selectedWeather.value}")
+//
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(16.dp),
+//        verticalArrangement = Arrangement.spacedBy(16.dp),
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        Text(
+//            "Selecciona las condiciones meteorológicas:",
+//            style = MaterialTheme.typography.bodyMedium,
+//            color = Color(0xFF6F67FA)
+//        )
+//
+//        // Usa FlowRow sin mainAxisSpacing y crossAxisSpacing
+//        FlowRow(
+//            modifier = Modifier.fillMaxWidth()
+//        ) {
+//            val weatherOptions = listOf("Soleado", "Nublado", "Lluvia", "Tormenta", "Niebla", "Nieve")
+//            weatherOptions.forEach { weatherType ->
+//                WeatherButton(
+//                    weatherType = weatherType,
+//                    selectedWeather = selectedWeather,
+//                    modifier = Modifier.padding(8.dp) // Espaciado entre los botones
+//                )
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//fun WeatherButton(weatherType: String, selectedWeather: MutableState<String>, modifier: Modifier = Modifier) {
+//    Button(
+//        onClick = { selectedWeather.value = weatherType },
+//        modifier = modifier
+//    ) {
+//        Text(text = weatherType)
+//    }
+//}
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun WeatherSelection(selectedWeather: MutableState<String>) {
     Log.d("Formulario", "Opción de clima seleccionada: ${selectedWeather.value}")
 
-    Text(
-        "Selecciona las condiciones meteorológicas:",
-        style = MaterialTheme.typography.bodyMedium
-    )
-
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Primera fila con tres botones
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            WeatherButton(weatherType = "Soleado", selectedWeather = selectedWeather)
-            WeatherButton(weatherType = "Nublado", selectedWeather = selectedWeather)
-            WeatherButton(weatherType = "Lluvia", selectedWeather = selectedWeather)
-        }
+        Text(
+            "Selecciona las condiciones meteorológicas:",
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color(0xFF6F67FA)
+        )
 
-        // Segunda fila con tres botones
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        // Usa FlowRow sin mainAxisSpacing y crossAxisSpacing
+        FlowRow(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            WeatherButton(weatherType = "Tormenta", selectedWeather = selectedWeather)
-            WeatherButton(weatherType = "Niebla", selectedWeather = selectedWeather)
-            WeatherButton(weatherType = "Nieve", selectedWeather = selectedWeather)
+            val weatherOptions = listOf("Soleado", "Nublado", "Lluvia", "Tormenta", "Niebla", "Nieve")
+            weatherOptions.forEach { weatherType ->
+                WeatherButton(
+                    weatherType = weatherType,
+                    selectedWeather = selectedWeather,
+                    modifier = Modifier.padding(4.dp) // Espaciado entre los botones
+                )
+            }
         }
     }
 }
 
 @Composable
-fun WeatherButton(weatherType: String, selectedWeather: MutableState<String>) {
-    Button(
-        onClick = {
-            selectedWeather.value = weatherType
-            Log.d("Formulario", "Valor de clima actualizado: ${selectedWeather.value}")
-        },
-        modifier = Modifier
+fun WeatherButton(weatherType: String, selectedWeather: MutableState<String>, modifier: Modifier = Modifier) {
+    val isSelected = selectedWeather.value == weatherType
 
-            .border(
-                width = 2.dp,
-                color = if (selectedWeather.value == weatherType) Color.Blue else Color.Gray,
-                shape = RectangleShape
-            ),
-        contentPadding = PaddingValues(16.dp)
+    Button(
+        onClick = { selectedWeather.value = weatherType },
+        modifier = modifier
+            .height(50.dp) // Altura fija para los botones
+            .width(100.dp), // Ancho fijo para los botones
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isSelected) Color(0xFF6F67FA) else Color.LightGray
+        ),
+        shape = MaterialTheme.shapes.small // Rectangular
     ) {
-        Text(weatherType, style = MaterialTheme.typography.bodySmall)
+        Text(
+            text = weatherType,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            style = MaterialTheme.typography.bodySmall
+        )
     }
 }
+
+//@Composable
+//fun WeatherButton(weatherType: String, selectedWeather: MutableState<String>, modifier: Modifier = Modifier) {
+//    val isSelected = selectedWeather.value == weatherType
+//    Button(
+//        onClick = { selectedWeather.value = weatherType },
+//        colors = ButtonDefaults.buttonColors(
+//            containerColor = if (isSelected) Color(0xFF6F67FA) else Color(0xFFF0F0F0),
+//            contentColor = if (isSelected) Color.White else Color.Black
+//        ),
+//        shape = RoundedCornerShape(12.dp),
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .aspectRatio(1f) // Hace que los botones sean cuadrados
+//    ) {
+//        Text(
+//            text = weatherType,
+//            style = MaterialTheme.typography.bodySmall // Ajusta el tamaño del texto
+//        )
+//    }
+//}
+
+
+
+//@Composable
+//fun WeatherButton(weatherType: String, selectedWeather: MutableState<String>) {
+//    Button(
+//        onClick = {
+//            selectedWeather.value = weatherType
+//            Log.d("Formulario", "Valor de clima actualizado: ${selectedWeather.value}")
+//        },
+//        modifier = Modifier
+//
+//            .border(
+//                width = 2.dp,
+//                color = if (selectedWeather.value == weatherType) Color.Blue else Color.Gray,
+//                shape = RectangleShape
+//            ),
+//        contentPadding = PaddingValues(16.dp)
+//    ) {
+//        Text(weatherType, style = MaterialTheme.typography.bodySmall)
+//    }
+//}
+
+//@Composable
+//fun EmocionesSelection(emociones: MutableList<String>) {
+//    Log.d("Formulario", "Emociones seleccionadas: $emociones")
+//
+//    Text("Selecciona tus emociones actuales:", style = MaterialTheme.typography.bodyMedium)
+//
+//    Column(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(top = 8.dp),
+//        verticalArrangement = Arrangement.spacedBy(8.dp)
+//    ) {
+//        val emocionesList = listOf(
+//            "Alegría", "Esperanza", "Satisfacción", "Gratitud", "Tristeza", "Ira", "Miedo", "Vergüenza",
+//            "Frustración", "Culpa", "Celos", "Confusión", "Ansiedad", "Alivio", "Empatía"
+//        )
+//
+//        emocionesList.forEach { emocion ->
+//            EmocionButton(emocion = emocion, emociones = emociones)
+//        }
+//    }
+//}
+//
+//@Composable
+//fun EmocionButton(emocion: String, emociones: MutableList<String>) {
+//    Button(
+//        onClick = {
+//            if (emociones.contains(emocion)) {
+//                emociones.remove(emocion)
+//            } else {
+//                emociones.add(emocion)
+//            }
+//            Log.d("Formulario", "Emociones actualizadas: $emociones")
+//        },
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .border(
+//                width = 2.dp,
+//                color = if (emociones.contains(emocion)) Color.Blue else Color.Gray,
+//                shape = RectangleShape
+//            ),
+//        contentPadding = PaddingValues(16.dp)
+//    ) {
+//        Text(emocion, style = MaterialTheme.typography.bodySmall)
+//    }
+//}
 
 @Composable
 fun EmocionesSelection(emociones: MutableList<String>) {
@@ -407,24 +772,38 @@ fun EmocionesSelection(emociones: MutableList<String>) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp), // Espacio entre filas
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val emocionesList = listOf(
-            "Alegría", "Esperanza", "Satisfacción", "Gratitud", "Tristeza", "Ira", "Miedo", "Vergüenza",
-            "Frustración", "Culpa", "Celos", "Confusión", "Ansiedad", "Alivio", "Empatía"
+            "Alegría", "Esperanza", "Satisfacción", "Alivio", "Tristeza", "Ira", "Miedo", "Vergüenza",
+            "Frustración", "Culpa", "Celos", "Confusión", "Ansiedad", "Gratitud", "Empatía"
         )
 
-        emocionesList.forEach { emocion ->
-            EmocionButton(emocion = emocion, emociones = emociones)
+        // Creamos filas manualmente para controlar mejor el espaciado
+        val chunkedEmociones = emocionesList.chunked(4) // Divide en filas de 4 botones
+
+        chunkedEmociones.forEach { rowEmotions ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(2.dp), // Espacio entre los botones en cada fila
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                rowEmotions.forEach { emocion ->
+                    EmocionButton(emocion = emocion, emociones = emociones)
+                }
+            }
         }
     }
 }
 
 @Composable
 fun EmocionButton(emocion: String, emociones: MutableList<String>) {
+    val isSelected = emociones.contains(emocion)
+
     Button(
         onClick = {
-            if (emociones.contains(emocion)) {
+            if (isSelected) {
                 emociones.remove(emocion)
             } else {
                 emociones.add(emocion)
@@ -432,17 +811,25 @@ fun EmocionButton(emocion: String, emociones: MutableList<String>) {
             Log.d("Formulario", "Emociones actualizadas: $emociones")
         },
         modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                width = 2.dp,
-                color = if (emociones.contains(emocion)) Color.Blue else Color.Gray,
-                shape = RectangleShape
-            ),
+            .height(50.dp) // Altura fija
+            .width(120.dp), // Ancho fijo
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isSelected) Color(0xFF6F67FA) else Color.LightGray
+        ),
+        shape = MaterialTheme.shapes.small, // Forma rectangular
         contentPadding = PaddingValues(16.dp)
     ) {
-        Text(emocion, style = MaterialTheme.typography.bodySmall)
+        Text(
+            text = emocion,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            style = MaterialTheme.typography.bodySmall
+        )
     }
 }
+
+
+
 
 @Composable
 fun SuenoSelection(selectedSueno: MutableState<String>) {
