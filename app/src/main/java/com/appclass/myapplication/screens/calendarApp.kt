@@ -120,8 +120,8 @@ fun CalendarioPantalla(navHostController: NavHostController) {
     LaunchedEffect(mesActual) {
         if (uidUsuarioActual != null) {
             db.collection(coleccion)
-                .whereGreaterThanOrEqualTo("dia", "1") // Aseguramos que recuperamos citas desde el día 1
-                .whereLessThanOrEqualTo("dia", diasMes.toString()) // Hasta el último día del mes
+                .whereGreaterThanOrEqualTo("dia", String.format("%02d", 1)) // Formato consistente de día
+                .whereLessThanOrEqualTo("dia", String.format("%02d", diasMes)) // Formato consistente de día
                 .get()
                 .addOnSuccessListener { documents ->
                     // Convertimos los documentos de Firestore en objetos Citas
@@ -133,10 +133,11 @@ fun CalendarioPantalla(navHostController: NavHostController) {
                     val citasUsuario = listaCitas.filter { it.usuario == uidUsuarioActual }
 
                     // Formatear el día a dos dígitos (asegura que siempre tenga dos dígitos)
-                    citas = citasUsuario.sortedBy { it.dia.padStart(2, '0').toInt() }
+                    citas = listaCitas.sortedBy { it.dia.toInt() }
 
                     // Guardamos los días que tienen citas del usuario actual
-                    diasConCitas = citasUsuario.map { it.dia.padStart(2, '0').toInt() }.toSet()
+                    diasConCitas = listaCitas.map { it.dia.toInt() }.toSet()
+
                     Log.d("CitasUsuario", citasUsuario.toString())
                 }
                 .addOnFailureListener {
@@ -274,7 +275,7 @@ fun DiaCasilla(dia: Int, diaActual: Boolean, tieneCita: Boolean, onClick: () -> 
         ) {
             // Texto con el número del día, blanco si es el día actual, negro si no lo es.
             Text(
-                text = dia.toString(),
+                text = String.format("%02d", dia),
                 style = MaterialTheme.typography.bodyMedium,
                 color = if (diaActual) Color.White else Color.Black
             )
@@ -293,6 +294,7 @@ fun DiaCasilla(dia: Int, diaActual: Boolean, tieneCita: Boolean, onClick: () -> 
 }
 
 // Pantalla que muestra las citas de un día específico, obteniendo los datos de Firestore.
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DiaCitas(dia: Int) {
     val db = FirebaseFirestore.getInstance()
@@ -391,7 +393,7 @@ fun DiaCitas(dia: Int) {
                 val datos = hashMapOf(
                     "nombre" to nombre,
                     "medico" to medico,
-                    "dia" to dia.toString(),
+                    "dia" to String.format("%02d", dia),
                     "hora" to hora,
                     "usuario" to userUid  // Agregar el UID del usuario
                 )
@@ -417,6 +419,7 @@ fun DiaCitas(dia: Int) {
                         }
                 } else {
                     // Modo agregar: crear nueva cita
+                    // Después de añadir una cita correctamente
                     db.collection(coleccion)
                         .document()
                         .set(datos)
@@ -432,6 +435,7 @@ fun DiaCitas(dia: Int) {
                         .addOnFailureListener {
                             mensaje = "No se ha podido guardar la cita correctamente"
                         }
+
                 }
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Magenta),
@@ -473,7 +477,7 @@ fun DiaCitas(dia: Int) {
 // Función que carga las citas de un día específico desde Firestore
 fun cargarCitas(dia: Int, db: FirebaseFirestore, coleccion: String, onCitasLoaded: (List<Citas>) -> Unit) {
     db.collection(coleccion)
-        .whereEqualTo("dia", dia.toString()) // Cargar solo las citas de este día
+        .whereEqualTo("dia", String.format("%02d", dia)) // Asegúrate de usar el mismo formato de día con dos dígitos
         .get()
         .addOnSuccessListener { documents ->
             val citas = documents.mapNotNull { doc ->
@@ -484,3 +488,4 @@ fun cargarCitas(dia: Int, db: FirebaseFirestore, coleccion: String, onCitasLoade
         .addOnFailureListener {
         }
 }
+
