@@ -190,6 +190,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.navigation.NavController
+import com.appclass.myapplication.componentes.BottomNavigationBarComponent
 
 //import com.jjoe64.graphview.GraphView
 //import com.jjoe64.graphview.series.DataPoint
@@ -217,7 +218,9 @@ fun PantallaGraficos(navController: NavHostController) {
                 title = { Text("Pantalla de Gráficos") }
             )
         },
-        bottomBar = { }
+        bottomBar = {
+            BottomNavigationBarComponent(navController = navController)
+        }
     ) {paddingValues ->
         Column(
             modifier = Modifier
