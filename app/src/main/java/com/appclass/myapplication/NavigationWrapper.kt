@@ -16,6 +16,8 @@ import com.appclass.myapplication.screens.LoginUsuario
 import com.appclass.myapplication.componentes.BottomNavigationBarComponent
 import com.appclass.myapplication.screens.ButtonAddForms2
 import com.appclass.myapplication.screens.CalendarioApp
+import com.appclass.myapplication.screens.CalendarioPantalla
+import com.appclass.myapplication.screens.DiaCitas
 //import com.appclass.myapplication.screens.EntradaApp
 import com.appclass.myapplication.screens.InicioAppCRM
 import com.appclass.myapplication.screens.PantallaInicio
@@ -66,4 +68,6 @@ fun NavigationWrapper(navHostController: NavHostController) {
         composable("buttonAddFormsUser") { ButtonAddForms2(navHostController) }
 
         composable("pantallaPerfil"){ PantallaPerfil(navHostController) }
+
+
     }}
