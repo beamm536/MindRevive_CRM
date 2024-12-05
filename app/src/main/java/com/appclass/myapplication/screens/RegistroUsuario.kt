@@ -327,9 +327,7 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
                         "El usuario se ha registrado correctamente",
                         Toast.LENGTH_SHORT
                     ).show()
-
-                    //REDIRECCION DENTRO DE LA APP
-                    //navController.navigate("pantallaInicio")
+                    navController.navigate("pantallaInicio")
 
                     OnclickBtnRegistrar(
                         nombre = nombre,
@@ -342,6 +340,7 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
                         navController = NavController(contextoApp)
 
                     )
+                    //navController.navigate("pantallaInicio")
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = MarronBtns)
