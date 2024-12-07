@@ -48,10 +48,11 @@ fun CalendarioPantalla(navHostController: NavHostController) {
     LaunchedEffect(mesActual) {
         if (uidUsuarioActual != null) {
             db.collection(coleccion)
-                .whereGreaterThanOrEqualTo("dia", String.format("%02d", 1))
-                .whereLessThanOrEqualTo("dia", String.format("%02d", diasMes))
+                .whereGreaterThanOrEqualTo("dia", String.format("%02d", 1)) // Aseguramos que recuperamos citas desde el día 1
+                .whereLessThanOrEqualTo("dia", String.format("%02d", diasMes)) // Hasta el último día del mes
                 .get()
                 .addOnSuccessListener { documents ->
+                    // Filtramos las citas que pertenecen al usuario actual
                     val listaCitas = documents.mapNotNull { it.toObject(Citas::class.java) }
                     diasConCitas = listaCitas.map { it.dia.toInt() }.toSet()
                     Log.d("CitasUsuario", listaCitas.toString())
