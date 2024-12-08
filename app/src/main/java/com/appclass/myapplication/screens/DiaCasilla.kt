@@ -35,6 +35,7 @@ fun DiaCasilla(dia: Int, diaActual: Boolean, tieneCita: Boolean, onClick: () -> 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Caja que muestra el número del día. Se resalta si es el día actual.
             Box(
                 modifier = Modifier
                     .size(40.dp)
@@ -44,6 +45,7 @@ fun DiaCasilla(dia: Int, diaActual: Boolean, tieneCita: Boolean, onClick: () -> 
                     ),
                 contentAlignment = Alignment.Center
             ) {
+                // Texto con el número del día, blanco si es el día actual, negro si no lo es.
                 Text(
                     text = String.format("%02d", dia),
                     color = if (diaActual) Color.White else Color.Black,
@@ -51,6 +53,7 @@ fun DiaCasilla(dia: Int, diaActual: Boolean, tieneCita: Boolean, onClick: () -> 
                 )
             }
 
+            // Si el día tiene citas, se muestra un punto rojo debajo del número del día
             if (tieneCita) {
                 Box(
                     modifier = Modifier
