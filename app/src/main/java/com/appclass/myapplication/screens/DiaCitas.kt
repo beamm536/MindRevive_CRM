@@ -28,7 +28,7 @@ fun DiaCitas(dia: Int) {
     var editada by remember { mutableStateOf(false) }
     var editandoCitaId by remember { mutableStateOf<String?>(null) }
 
-    // Recuperar las citas de Firestore
+    // Recuperar las citas de Firestore cuando el día cambia
     LaunchedEffect(dia) {
         cargarCitas(dia, db, coleccion) { listaCitas ->
             citas = listaCitas
@@ -47,6 +47,7 @@ fun DiaCitas(dia: Int) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Campos de texto para ingresar los detalles de la cita
         OutlinedTextField(
             value = nombre,
             onValueChange = { nombre = it },
@@ -67,6 +68,7 @@ fun DiaCitas(dia: Int) {
 
         Spacer(modifier = Modifier.size(5.dp))
 
+        // Botón para añadir o editar cita
         Button(
             onClick = {
                 if (nombre.isBlank() || medico.isBlank() || hora.isBlank()) {
@@ -116,6 +118,7 @@ fun DiaCitas(dia: Int) {
                 )
 
                 if (editada && !editandoCitaId.isNullOrEmpty()) {
+                    // Modo edición: actualizar cita existente
                     db.collection(coleccion)
                         .document(editandoCitaId!!)
                         .update(datos as Map<String, Any>)
@@ -131,6 +134,8 @@ fun DiaCitas(dia: Int) {
                             Log.e("FirebaseError", "Error al actualizar cita", e)
                         }
                 } else {
+                    // Modo agregar: crear nueva cita
+                    // Después de añadir una cita correctamente
                     db.collection(coleccion)
                         .document()
                         .set(datos)
@@ -158,6 +163,7 @@ fun DiaCitas(dia: Int) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Mostrar citas del día
         citas.forEach { cita ->
             Card(
                 modifier = Modifier
@@ -182,6 +188,7 @@ fun DiaCitas(dia: Int) {
     }
 }
 
+// Función que carga las citas de un día específico desde Firestore
 fun cargarCitas(dia: Int, db: FirebaseFirestore, coleccion: String, onCitasLoaded: (List<Citas>) -> Unit) {
     db.collection(coleccion)
         .whereEqualTo("dia", String.format("%02d", dia))
@@ -197,6 +204,7 @@ fun cargarCitas(dia: Int, db: FirebaseFirestore, coleccion: String, onCitasLoade
         }
 }
 
+// Función para limpiar los campos del formulario
 fun limpiarFormulario() {
     var nombre = ""
     var medico = ""

@@ -2,11 +2,16 @@ package com.appclass.myapplication.screens
 
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,11 +20,19 @@ import java.util.UUID
 
 @Composable
 @RequiresApi(Build.VERSION_CODES.O)
-fun ButtonAddForms2(navHostController: NavHostController) {
-    Column {
+fun ButtonAddForms2(navHostController: NavHostController, modifier: Modifier = Modifier) {
+    val context = LocalContext.current // Obtener el contexto local para mostrar el Toast
+
+    Column(modifier = Modifier
+        .padding(200.dp)) {
+
         // Botón para cargar formularios de ejemplo
         Button(onClick = {
+            // Cargar formularios de ejemplo (puedes agregar aquí tu lógica)
             cargarFormulariosDeEjemplo2(navHostController)
+
+            // Mostrar Toast de confirmación
+            Toast.makeText(context, "Formularios cargados con éxito", Toast.LENGTH_SHORT).show()
         }) {
             Text("Cargar Formularios de Ejemplo")
         }
