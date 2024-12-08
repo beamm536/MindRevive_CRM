@@ -64,6 +64,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.text.style.TextAlign
 
 import androidx.compose.ui.unit.dp
@@ -107,13 +108,13 @@ fun Questionario(navController: NavController) {
                 TopAppBar(
                     title = {
                         Text(
-                            text = "Cuestionario",
+                            text = "Cuestionario diario",
                             fontSize = 24.sp,
                             color = Color.White
                         )
                     },
                     colors = TopAppBarDefaults.mediumTopAppBarColors(
-                        containerColor = Color(0xFF0277BD)
+                        containerColor = Color(0xFF6650a4)
                     )
                 )
             },
@@ -200,10 +201,12 @@ fun FormularioInput(navController: NavController) {
 
         item {
             TextInputField("Logros", logros.value) { logros.value = it }
+            Spacer(modifier = Modifier.size(8.dp))
         }
 
         item {
             TextInputField("Cuidado personal", cuidadoPersonal.value) { cuidadoPersonal.value = it }
+            Spacer(modifier = Modifier.size(8.dp))
         }
 
         item {
@@ -211,6 +214,7 @@ fun FormularioInput(navController: NavController) {
         }
 
         item {
+            Spacer(modifier = Modifier.size(16.dp))
             TextInputField("Pensamientos negativos", pensamientosNegativos.value) { pensamientosNegativos.value = it }
         }
 
@@ -223,6 +227,7 @@ fun FormularioInput(navController: NavController) {
         }
 
         item {
+            Spacer(modifier = Modifier.size(12.dp))
             TextInputField("Agradecimientos", agradecimientos.value) { agradecimientos.value = it }
         }
 
@@ -232,6 +237,7 @@ fun FormularioInput(navController: NavController) {
 
         item {
             TextInputField("Expectativa para mañana", expectativaManana.value) { expectativaManana.value = it }
+            Spacer(modifier = Modifier.size(8.dp))
         }
 
         item {
@@ -306,23 +312,7 @@ fun EstadoAnimoSelector(estadoAnimo: MutableState<Int>, onEstadoAnimoChange: (In
     }
 }
 
-//@Composable
-//fun SliderWithLabel(label: String, value: Int, onValueChange: (Int) -> Unit) {
-//    // Display the label and current value of the slider
-//    Text("$label: $value")
-//
-//    // Log when the slider value changes
-//    Slider(
-//        value = value.toFloat(),
-//        onValueChange = { newValue ->
-//            // Log the change to Logcat
-//            Log.d("Formulario", "$label cambiado a: $newValue")
-//            onValueChange(newValue.toInt())
-//        },
-//        valueRange = 0f..5f,
-//        steps = 23
-//    )
-//}
+
 @Composable
 fun SliderWithLabel(label: String, value: Int, onValueChange: (Int) -> Unit) {
     Row(
@@ -346,8 +336,8 @@ fun SliderWithLabel(label: String, value: Int, onValueChange: (Int) -> Unit) {
             valueRange = 0f..5f,
             steps = 4, // Reducir a 4 pasos para simplificar
             colors = SliderDefaults.colors(
-                thumbColor = Color(0xFF6F67FA),
-                activeTrackColor = Color(0xFF6F67FA)
+                thumbColor = Color(0xFF6650a4),
+                activeTrackColor = Color(0xFF6650a4)
             ),
             modifier = Modifier.width(200.dp) // Controlar el tamaño para ajustarlo al diseño
         )
@@ -355,23 +345,6 @@ fun SliderWithLabel(label: String, value: Int, onValueChange: (Int) -> Unit) {
 }
 
 
-//@Composable
-//fun SliderWithLabel2(label: String, value: Int, onValueChange: (Int) -> Unit) {
-//    // Display the label and current value of the slider
-//    Text("$label: $value")
-//
-//    // Log when the slider value changes
-//    Slider(
-//        value = value.toFloat(),
-//        onValueChange = { newValue ->
-//            // Log the change to Logcat
-//            Log.d("Formulario", "$label cambiado a: $newValue")
-//            onValueChange(newValue.toInt())
-//        },
-//        valueRange = 0f..10f,
-//        steps = 23
-//    )
-//}
 
 @Composable
 fun SliderWithLabel2(label: String, value: Int, onValueChange: (Int) -> Unit) {
@@ -396,31 +369,15 @@ fun SliderWithLabel2(label: String, value: Int, onValueChange: (Int) -> Unit) {
             valueRange = 0f..10f,
             steps = 9, // Ajustado para reflejar pasos iguales (0 a 10)
             colors = SliderDefaults.colors(
-                thumbColor = Color(0xFF6F67FA),
-                activeTrackColor = Color(0xFF6F67FA)
+                thumbColor = Color(0xFF6650a4),
+                activeTrackColor = Color(0xFF6650a4)
             ),
             modifier = Modifier.width(200.dp) // Tamaño controlado para mantener proporciones
         )
     }
 }
 
-//@Composable
-//fun SliderWithLabel3(label: String, value: Int, onValueChange: (Int) -> Unit) {
-//    // Display the label and current value of the slider
-//    Text("$label: $value")
-//
-//    // Log when the slider value changes
-//    Slider(
-//        value = value.toFloat(),
-//        onValueChange = { newValue ->
-//            // Log the change to Logcat
-//            Log.d("Formulario", "$label cambiado a: $newValue")
-//            onValueChange(newValue.toInt())
-//        },
-//        valueRange = 0f..24f,
-//        steps = 23
-//    )
-//}
+
 
 @Composable
 fun SliderWithLabel3(label: String, value: Int, onValueChange: (Int) -> Unit) {
@@ -445,8 +402,8 @@ fun SliderWithLabel3(label: String, value: Int, onValueChange: (Int) -> Unit) {
             valueRange = 0f..24f,
             steps = 23, // Manteniendo los pasos especificados
             colors = SliderDefaults.colors(
-                thumbColor = Color(0xFF6F67FA),
-                activeTrackColor = Color(0xFF6F67FA)
+                thumbColor = Color(0xFF6650a4),
+                activeTrackColor = Color(0xFF6650a4)
             ),
             modifier = Modifier.width(200.dp) // Controla el ancho para mantener un diseño limpio
         )
@@ -454,284 +411,7 @@ fun SliderWithLabel3(label: String, value: Int, onValueChange: (Int) -> Unit) {
 }
 
 
-//@Composable
-//fun WeatherSelection(selectedWeather: MutableState<String>) {
-//    Log.d("Formulario", "Opción de clima seleccionada: ${selectedWeather.value}")
-//
-//    Text(
-//        "Selecciona las condiciones meteorológicas:",
-//        style = MaterialTheme.typography.bodyMedium
-//    )
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(top = 8.dp),
-//        verticalArrangement = Arrangement.spacedBy(16.dp)
-//    ) {
-//        // Primera fila con tres botones
-//        Row(
-//            modifier = Modifier.fillMaxWidth(),
-//            horizontalArrangement = Arrangement.spacedBy(8.dp)
-//        ) {
-//            WeatherButton(weatherType = "Soleado", selectedWeather = selectedWeather)
-//            WeatherButton(weatherType = "Nublado", selectedWeather = selectedWeather)
-//            WeatherButton(weatherType = "Lluvia", selectedWeather = selectedWeather)
-//        }
-//
-//        // Segunda fila con tres botones
-//        Row(
-//            modifier = Modifier.fillMaxWidth(),
-//            horizontalArrangement = Arrangement.spacedBy(8.dp)
-//        ) {
-//            WeatherButton(weatherType = "Tormenta", selectedWeather = selectedWeather)
-//            WeatherButton(weatherType = "Niebla", selectedWeather = selectedWeather)
-//            WeatherButton(weatherType = "Nieve", selectedWeather = selectedWeather)
-//        }
-//    }
-//}
 
-//@Composable
-//fun WeatherSelection(selectedWeather: MutableState<String>) {
-//    Log.d("Formulario", "Opción de clima seleccionada: ${selectedWeather.value}")
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp),
-//        verticalArrangement = Arrangement.spacedBy(16.dp),
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Text(
-//            "Selecciona las condiciones meteorológicas:",
-//            style = MaterialTheme.typography.bodyMedium,
-//            color = Color(0xFF6F67FA)
-//        )
-//
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(200.dp) // Altura fija para evitar restricciones infinitas
-//        ) {
-//            LazyVerticalGrid(
-//                columns = GridCells.Fixed(3),
-//                modifier = Modifier.fillMaxSize(),
-//                contentPadding = PaddingValues(8.dp),
-//                horizontalArrangement = Arrangement.spacedBy(8.dp),
-//                verticalArrangement = Arrangement.spacedBy(8.dp)
-//            ) {
-//                val weatherOptions = listOf("Soleado", "Nublado", "Lluvia", "Tormenta", "Niebla", "Nieve")
-//                items(weatherOptions.size) { index ->
-//                    WeatherButton(
-//                        weatherType = weatherOptions[index],
-//                        selectedWeather = selectedWeather
-//                    )
-//                }
-//            }
-//        }
-//    }
-//}
-//@Composable
-//fun WeatherSelection(selectedWeather: MutableState<String>) {
-//    Log.d("Formulario", "Opción de clima seleccionada: ${selectedWeather.value}")
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp),
-//        verticalArrangement = Arrangement.spacedBy(16.dp),
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Text(
-//            "Selecciona las condiciones meteorológicas:",
-//            style = MaterialTheme.typography.bodyMedium,
-//            color = Color(0xFF6F67FA)
-//        )
-//
-//        // Caja con tamaño controlado para el LazyVerticalGrid
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(200.dp) // Limita la altura de la caja
-//        ) {
-//            LazyVerticalGrid(
-//                columns = GridCells.Fixed(3),
-//                modifier = Modifier.fillMaxSize(),
-//                contentPadding = PaddingValues(8.dp),
-//                horizontalArrangement = Arrangement.spacedBy(8.dp),
-//                verticalArrangement = Arrangement.spacedBy(8.dp)
-//            ) {
-//                val weatherOptions = listOf("Soleado", "Nublado", "Lluvia", "Tormenta", "Niebla", "Nieve")
-//                items(weatherOptions.size) { index ->
-//                    WeatherButton(
-//                        weatherType = weatherOptions[index],
-//                        selectedWeather = selectedWeather,
-//                        modifier = Modifier.height(40.dp) // Ajuste de tamaño de los botones
-//                    )
-//                }
-//            }
-//        }
-//    }
-//}
-//@OptIn(ExperimentalLayoutApi::class)
-//@Composable
-//fun WeatherSelection(selectedWeather: MutableState<String>) {
-//    Log.d("Formulario", "Opción de clima seleccionada: ${selectedWeather.value}")
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp),
-//        verticalArrangement = Arrangement.spacedBy(16.dp),
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Text(
-//            "Selecciona las condiciones meteorológicas:",
-//            style = MaterialTheme.typography.bodyMedium,
-//            color = Color(0xFF6F67FA)
-//        )
-//
-//        // Usa FlowRow sin mainAxisSpacing y crossAxisSpacing
-//        FlowRow(
-//            modifier = Modifier.fillMaxWidth()
-//        ) {
-//            val weatherOptions = listOf("Soleado", "Nublado", "Lluvia", "Tormenta", "Niebla", "Nieve")
-//            weatherOptions.forEach { weatherType ->
-//                WeatherButton(
-//                    weatherType = weatherType,
-//                    selectedWeather = selectedWeather,
-//                    modifier = Modifier.padding(8.dp) // Espaciado entre los botones
-//                )
-//            }
-//        }
-//    }
-//}
-//
-//@Composable
-//fun WeatherButton(weatherType: String, selectedWeather: MutableState<String>, modifier: Modifier = Modifier) {
-//    Button(
-//        onClick = { selectedWeather.value = weatherType },
-//        modifier = modifier
-//    ) {
-//        Text(text = weatherType)
-//    }
-//}
-
-//ULTIMO
-//@OptIn(ExperimentalLayoutApi::class)
-//@Composable
-//fun WeatherSelection(selectedWeather: MutableState<String>) {
-//    Log.d("Formulario", "Opción de clima seleccionada: ${selectedWeather.value}")
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp),
-//        verticalArrangement = Arrangement.spacedBy(16.dp),
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Text(
-//            "Selecciona las condiciones meteorológicas:",
-//            style = MaterialTheme.typography.bodyMedium,
-//            color = Color(0xFF6F67FA)
-//        )
-//
-//        // Usa FlowRow sin mainAxisSpacing y crossAxisSpacing
-//        FlowRow(
-//            modifier = Modifier.fillMaxWidth()
-//        ) {
-//            val weatherOptions = listOf("Soleado", "Nublado", "Lluvia", "Tormenta", "Niebla", "Nieve")
-//            weatherOptions.forEach { weatherType ->
-//                WeatherButton(
-//                    weatherType = weatherType,
-//                    selectedWeather = selectedWeather,
-//                    modifier = Modifier.padding(4.dp) // Espaciado entre los botones
-//                )
-//            }
-//        }
-//    }
-//}
-//
-//@Composable
-//fun WeatherButton(weatherType: String, selectedWeather: MutableState<String>, modifier: Modifier = Modifier) {
-//    val isSelected = selectedWeather.value == weatherType
-//
-//    Button(
-//        onClick = { selectedWeather.value = weatherType },
-//        modifier = modifier
-//            .height(50.dp) // Altura fija para los botones
-//            .width(100.dp), // Ancho fijo para los botones
-//        colors = ButtonDefaults.buttonColors(
-//            containerColor = if (isSelected) Color(0xFF6F67FA) else Color.LightGray
-//        ),
-//        shape = MaterialTheme.shapes.small // Rectangular
-//    ) {
-//        Text(
-//            text = weatherType,
-//            fontWeight = FontWeight.Bold,
-//            color = Color.White,
-//            style = MaterialTheme.typography.bodySmall
-//        )
-//    }
-//}
-
-//ULTIMO 2
-//@OptIn(ExperimentalLayoutApi::class)
-//@Composable
-//fun WeatherSelection(selectedWeather: MutableState<String>) {
-//    Log.d("Formulario", "Opción de clima seleccionada: ${selectedWeather.value}")
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp),
-//        verticalArrangement = Arrangement.spacedBy(16.dp),
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Text(
-//            "Selecciona las condiciones meteorológicas:",
-//            style = MaterialTheme.typography.bodyMedium, // Mismo estilo que el texto de emociones
-//            color = MaterialTheme.colorScheme.primary // Usar el color primario del tema
-//        )
-//
-//        FlowRow(
-//            modifier = Modifier.fillMaxWidth(), // Ocupa todo el ancho
-//            horizontalArrangement = Arrangement.Center // Centra horizontalmente los botones
-//        ) {
-//            val weatherOptions = listOf("Soleado", "Nublado", "Lluvia", "Tormenta", "Niebla", "Nieve")
-//            weatherOptions.forEach { weatherType ->
-//                WeatherButton(
-//                    weatherType = weatherType,
-//                    selectedWeather = selectedWeather,
-//                    modifier = Modifier.padding(8.dp) // Espaciado uniforme entre los botones
-//                )
-//            }
-//        }
-//    }
-//}
-//
-//@Composable
-//fun WeatherButton(weatherType: String, selectedWeather: MutableState<String>, modifier: Modifier = Modifier) {
-//    val isSelected = selectedWeather.value == weatherType
-//
-//    Button(
-//        onClick = { selectedWeather.value = weatherType },
-//        modifier = modifier
-//            .height(50.dp) // Altura fija para los botones
-//            .width(120.dp), // Botones más anchos
-//        colors = ButtonDefaults.buttonColors(
-//            containerColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.LightGray
-//        ),
-//        shape = MaterialTheme.shapes.small // Rectangular
-//    ) {
-//        Text(
-//            text = weatherType,
-//            fontWeight = FontWeight.Bold,
-//            color = Color.White,
-//            style = MaterialTheme.typography.bodySmall
-//        )
-//    }
-//}
 @Composable
 fun WeatherSelection(selectedWeather: MutableState<String>) {
     Log.d("Formulario", "Opción de clima seleccionada: ${selectedWeather.value}")
@@ -741,40 +421,49 @@ fun WeatherSelection(selectedWeather: MutableState<String>) {
             .fillMaxSize()
             .padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+
     ) {
         Text(
             "Selecciona las condiciones meteorológicas:",
             style = MaterialTheme.typography.bodyMedium, // Mismo estilo que el texto de emociones
-            color = MaterialTheme.colorScheme.primary // Usar el color primario del tema
+
         )
-
-        // Dividir las opciones en grupos de 3 para formar filas
-        val weatherOptions = listOf("Soleado", "Nublado", "Lluvia", "Tormenta", "Niebla", "Nieve")
-        val chunkedWeatherOptions = weatherOptions.chunked(3)
-
-        // Contenedor más ancho para reducir el espaciado relativo
         Column(
-            modifier = Modifier.fillMaxWidth(0.9f), // Hace que el contenedor ocupe el 90% del ancho
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            chunkedWeatherOptions.forEach { rowWeatherOptions ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp) // Menor espacio entre columnas
-                ) {
-                    rowWeatherOptions.forEach { weatherType ->
-                        WeatherButton(
-                            weatherType = weatherType,
-                            selectedWeather = selectedWeather
-                        )
+
+
+            // Dividir las opciones en grupos de 3 para formar filas
+            val weatherOptions =
+                listOf("Soleado", "Nublado", "Lluvia", "Tormenta", "Niebla", "Nieve")
+            val chunkedWeatherOptions = weatherOptions.chunked(3)
+
+            // Contenedor más ancho para reducir el espaciado relativo
+            Column(
+                modifier = Modifier.fillMaxWidth(0.9f), // Hace que el contenedor ocupe el 90% del ancho
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                chunkedWeatherOptions.forEach { rowWeatherOptions ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp) // Menor espacio entre columnas
+                    ) {
+                        rowWeatherOptions.forEach { weatherType ->
+                            WeatherButton(
+                                weatherType = weatherType,
+                                selectedWeather = selectedWeather
+                            )
+                        }
                     }
                 }
             }
         }
     }
 }
-
 @Composable
 fun WeatherButton(weatherType: String, selectedWeather: MutableState<String>, modifier: Modifier = Modifier) {
     val isSelected = selectedWeather.value == weatherType
@@ -801,170 +490,11 @@ fun WeatherButton(weatherType: String, selectedWeather: MutableState<String>, mo
 
 
 
-
-//@Composable
-//fun WeatherButton(weatherType: String, selectedWeather: MutableState<String>, modifier: Modifier = Modifier) {
-//    val isSelected = selectedWeather.value == weatherType
-//    Button(
-//        onClick = { selectedWeather.value = weatherType },
-//        colors = ButtonDefaults.buttonColors(
-//            containerColor = if (isSelected) Color(0xFF6F67FA) else Color(0xFFF0F0F0),
-//            contentColor = if (isSelected) Color.White else Color.Black
-//        ),
-//        shape = RoundedCornerShape(12.dp),
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .aspectRatio(1f) // Hace que los botones sean cuadrados
-//    ) {
-//        Text(
-//            text = weatherType,
-//            style = MaterialTheme.typography.bodySmall // Ajusta el tamaño del texto
-//        )
-//    }
-//}
-
-
-
-//@Composable
-//fun WeatherButton(weatherType: String, selectedWeather: MutableState<String>) {
-//    Button(
-//        onClick = {
-//            selectedWeather.value = weatherType
-//            Log.d("Formulario", "Valor de clima actualizado: ${selectedWeather.value}")
-//        },
-//        modifier = Modifier
-//
-//            .border(
-//                width = 2.dp,
-//                color = if (selectedWeather.value == weatherType) Color.Blue else Color.Gray,
-//                shape = RectangleShape
-//            ),
-//        contentPadding = PaddingValues(16.dp)
-//    ) {
-//        Text(weatherType, style = MaterialTheme.typography.bodySmall)
-//    }
-//}
-
-//@Composable
-//fun EmocionesSelection(emociones: MutableList<String>) {
-//    Log.d("Formulario", "Emociones seleccionadas: $emociones")
-//
-//    Text("Selecciona tus emociones actuales:", style = MaterialTheme.typography.bodyMedium)
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(top = 8.dp),
-//        verticalArrangement = Arrangement.spacedBy(8.dp)
-//    ) {
-//        val emocionesList = listOf(
-//            "Alegría", "Esperanza", "Satisfacción", "Gratitud", "Tristeza", "Ira", "Miedo", "Vergüenza",
-//            "Frustración", "Culpa", "Celos", "Confusión", "Ansiedad", "Alivio", "Empatía"
-//        )
-//
-//        emocionesList.forEach { emocion ->
-//            EmocionButton(emocion = emocion, emociones = emociones)
-//        }
-//    }
-//}
-//
-//@Composable
-//fun EmocionButton(emocion: String, emociones: MutableList<String>) {
-//    Button(
-//        onClick = {
-//            if (emociones.contains(emocion)) {
-//                emociones.remove(emocion)
-//            } else {
-//                emociones.add(emocion)
-//            }
-//            Log.d("Formulario", "Emociones actualizadas: $emociones")
-//        },
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .border(
-//                width = 2.dp,
-//                color = if (emociones.contains(emocion)) Color.Blue else Color.Gray,
-//                shape = RectangleShape
-//            ),
-//        contentPadding = PaddingValues(16.dp)
-//    ) {
-//        Text(emocion, style = MaterialTheme.typography.bodySmall)
-//    }
-//}
-
-//@Composable
-//fun EmocionesSelection(emociones: MutableList<String>) {
-//    Log.d("Formulario", "Emociones seleccionadas: $emociones")
-//
-//    Text("Selecciona tus emociones actuales:", style = MaterialTheme.typography.bodyMedium)
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(top = 8.dp),
-//        verticalArrangement = Arrangement.spacedBy(16.dp), // Espacio entre filas
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        val emocionesList = listOf(
-//            "Alegría", "Esperanza", "Satisfacción", "Alivio", "Tristeza", "Ira", "Miedo", "Vergüenza",
-//            "Frustración", "Culpa", "Celos", "Confusión", "Ansiedad", "Gratitud", "Empatía"
-//        )
-//
-//        // Creamos filas manualmente para controlar mejor el espaciado
-//        val chunkedEmociones = emocionesList.chunked(4) // Divide en filas de 4 botones
-//
-//        chunkedEmociones.forEach { rowEmotions ->
-//            Row(
-//                modifier = Modifier.fillMaxWidth(),
-//                horizontalArrangement = Arrangement.spacedBy(2.dp), // Espacio entre los botones en cada fila
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                rowEmotions.forEach { emocion ->
-//                    EmocionButton(emocion = emocion, emociones = emociones)
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//@Composable
-//fun EmocionButton(emocion: String, emociones: MutableList<String>) {
-//    val isSelected = emociones.contains(emocion)
-//
-//    Button(
-//        onClick = {
-//            if (isSelected) {
-//                emociones.remove(emocion)
-//            } else {
-//                emociones.add(emocion)
-//            }
-//            Log.d("Formulario", "Emociones actualizadas: $emociones")
-//        },
-//        modifier = Modifier
-//            .height(50.dp) // Altura fija
-//            .width(120.dp), // Ancho fijo
-//        colors = ButtonDefaults.buttonColors(
-//            containerColor = if (isSelected) Color(0xFF6F67FA) else Color.LightGray
-//        ),
-//        shape = MaterialTheme.shapes.small, // Forma rectangular
-//        contentPadding = PaddingValues(16.dp)
-//    ) {
-//        Text(
-//            text = emocion,
-//            fontWeight = FontWeight.Bold,
-//            color = Color.White,
-//            style = MaterialTheme.typography.bodySmall
-//        )
-//    }
-//}
-
-//
-
 @Composable
 fun EmocionesSelection(emociones: MutableList<String>) {
     Log.d("Formulario", "Emociones seleccionadas: $emociones")
 
-    Text("Selecciona tus emociones actuales:", style = MaterialTheme.typography.bodyMedium)
+    Text("Selecciona tus emociones actuales:", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top= 12.dp,bottom = 8.dp))
 
     Row(
         modifier = Modifier
@@ -1015,7 +545,7 @@ fun EmocionButton(emocion: String, emociones: MutableList<String>) {
             },
             modifier = Modifier.fillMaxSize(), // El botón ocupa todo el Box
             colors = ButtonDefaults.buttonColors(
-                containerColor = if (isSelected) Color(0xFF6F67FA) else Color.LightGray
+                containerColor = if (isSelected) Color(0xFF6650a4) else Color.LightGray
             ),
             shape = MaterialTheme.shapes.small,
             contentPadding = PaddingValues(0.dp)
@@ -1036,56 +566,119 @@ fun EmocionButton(emocion: String, emociones: MutableList<String>) {
 
 
 
-
-
-
 @Composable
 fun SuenoSelection(selectedSueno: MutableState<String>) {
     Log.d("Formulario", "Opción seleccionada para sueño: ${selectedSueno.value}")
 
-    Text("Selecciona cómo te sientes sobre tu sueño:", style = MaterialTheme.typography.bodyMedium)
+    Text(
+        "Selecciona cómo te sientes sobre tu sueño:",
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier.padding(top = 12.dp, bottom = 8.dp)
+    )
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp) // Espacio entre filas
     ) {
         val suenoOptions = listOf("Muy mal", "Mal", "Regular", "Bien", "Muy bien")
 
-        suenoOptions.forEach { option ->
-            SuenoButton(option = option, selectedSueno = selectedSueno)
+        // Dividimos las opciones en dos filas: una con 3 elementos y otra con 2.
+        val chunkedSuenoOptions = listOf(
+            suenoOptions.subList(0, 3), // Primera fila: Muy mal, Mal, Regular
+            suenoOptions.subList(3, 5) // Segunda fila: Bien, Muy bien
+        )
+
+        chunkedSuenoOptions.forEach { rowOptions ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp) // Espacio entre botones
+            ) {
+                rowOptions.forEach { option ->
+                    SuenoButton(option = option, selectedSueno = selectedSueno)
+                }
+            }
         }
     }
 }
 
 @Composable
 fun SuenoButton(option: String, selectedSueno: MutableState<String>) {
-    Button(
-        onClick = {
-            selectedSueno.value = if (selectedSueno.value == option) "" else option
-            Log.d("Formulario", "Opción seleccionada para sueño: ${selectedSueno.value}")
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                width = 2.dp,
-                color = if (selectedSueno.value == option) Color.Blue else Color.Gray,
-                shape = RectangleShape
-            ),
-        contentPadding = PaddingValues(16.dp)
+    val isSelected = selectedSueno.value == option
+
+    Box(
+        modifier = Modifier.size(width = 120.dp, height = 50.dp) // Tamaño fijo
     ) {
-        Text(option, style = MaterialTheme.typography.bodySmall)
+        Button(
+            onClick = {
+                selectedSueno.value = if (isSelected) "" else option
+                Log.d("Formulario", "Opción seleccionada para sueño: ${selectedSueno.value}")
+            },
+            modifier = Modifier.fillMaxSize(), // El botón ocupa todo el Box
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (isSelected) Color(0xFF6650a4) else Color.LightGray
+            ),
+            shape = MaterialTheme.shapes.small,
+            contentPadding = PaddingValues(0.dp)
+        ) {
+            Text(
+                text = option,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
 
 
 
+
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextInputField(label: String, value: String, onValueChange: (String) -> Unit) {
-    Text(label)
-    TextField(value = value, onValueChange = onValueChange, modifier = Modifier.fillMaxWidth())
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(start = 4.dp)
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = if (value.isEmpty()) Color.Gray else Color(0xFF6650a4),
+                    shape = RoundedCornerShape(16.dp)
+                )
+                .padding(horizontal = 8.dp, vertical = 4.dp)
+        ) {
+            TextField(
+                value = value,
+                onValueChange = onValueChange,
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.Transparent, // Fondo transparente
+                    cursorColor = Color(0xFF6650a4), // Similar a MoradoTextFields
+                    focusedIndicatorColor = Color.Transparent, // Sin línea inferior
+                    unfocusedIndicatorColor = Color.Transparent // Sin línea inferior
+                ),
+                singleLine = true
+            )
+        }
+    }
 }
+
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -1167,8 +760,20 @@ fun EnviarFormularioButton(
             Log.e("Formulario", "No hay usuario autenticado")
         }
         navHostController.navigate("pantallaGraficos")
-    }) {
-        Text("Enviar")
+    },
+        modifier = Modifier
+            .fillMaxWidth() // Botón ocupa todo el ancho
+            .padding(horizontal = 16.dp, vertical = 8.dp), // Margen opcional para separar del borde
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0xFF6650a4) // Color personalizado
+        ),
+        shape = RoundedCornerShape(12.dp) // Esquinas redondeadas opcionales
+    ) {
+        Text(
+            text = "Enviar",
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.White // Color del texto
+        )
     }
     val formEnviadoFinal = formEnviadoHoyState.value
     Log.e("Valor de formEnviado pasa pag", "hola $formEnviadoFinal")
