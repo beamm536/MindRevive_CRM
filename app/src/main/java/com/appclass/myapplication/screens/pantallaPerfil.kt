@@ -184,7 +184,7 @@ fun MostrarDatosUsuario(){
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .fillMaxHeight(0.7f) ,
+            .fillMaxHeight(0.8f) ,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -333,7 +333,7 @@ fun MostrarDatosUsuario(){
 }
 
 
-//----------FALTA LA ADAPTACION Y PONERLO EN UN ROW Y AÑADIRLE BIEN LA LOGICA 
+//----------FALTA LA ADAPTACION Y PONERLO EN UN ROW
 
 @Composable
 fun RadioButtonGenero(seleccion: (String) -> Unit) {
@@ -347,10 +347,19 @@ fun RadioButtonGenero(seleccion: (String) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Text(text = "Selecciona una opción")
+        Text(
+            text = "Selecciona una opción",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
+
+        )
 
 
-        Column(modifier = Modifier.padding(top = 16.dp)) {
+        Row(
+            modifier = Modifier.padding(top = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(
                         selected = opcionSeleccionada == "Hombre",
@@ -359,7 +368,7 @@ fun RadioButtonGenero(seleccion: (String) -> Unit) {
                         seleccion(opcionSeleccionada)
                     }
                 )
-                Text(text = "Hombre", modifier = Modifier.padding(start = 8.dp))
+                Text(text = "Hombre", modifier = Modifier.padding(end = 8.dp))
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(
@@ -369,7 +378,7 @@ fun RadioButtonGenero(seleccion: (String) -> Unit) {
                         seleccion(opcionSeleccionada)
                     }
                 )
-                Text(text = "Mujer", modifier = Modifier.padding(start = 8.dp))
+                Text(text = "Mujer", modifier = Modifier.padding(end = 8.dp))
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(
@@ -379,11 +388,11 @@ fun RadioButtonGenero(seleccion: (String) -> Unit) {
                         seleccion(opcionSeleccionada)
                     }
                 )
-                Text(text = "Otro", modifier = Modifier.padding(start = 8.dp))
+                Text(text = "Otro", modifier = Modifier.padding(end = 8.dp))
             }
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        //Spacer(modifier = Modifier.height(24.dp))
 
         //segun la opcion seleccionada q salga una imagen u otraa ---> esta parte de la logica la tengo en otra funcion
     }
@@ -395,18 +404,24 @@ fun MostrarImagenPerfil(opcion: String) {
         "Hombre" -> Image1(
             painter = painterResource(id = R.drawable.img_male_avatar),
             contentDescription = "Imagen Hombre",
-            modifier = Modifier.size(200.dp)
+            modifier = Modifier
+                .size(200.dp)
+                .padding(top = 8.dp)
         )
         "Mujer" -> Image1(
             painter = painterResource(id = R.drawable.profile_user),
             contentDescription = "Imagen Mujer",
-            modifier = Modifier.size(200.dp)
+            modifier = Modifier
+                .size(200.dp)
+                .padding(top = 8.dp)
         )
         "Otro" -> Icon(
                 imageVector = Icons.Default.Person,
                 contentDescription = "Img3",
                 tint = Color.Gray,
-                modifier = Modifier.size(200.dp)
+                modifier = Modifier
+                    .size(200.dp)
+                    .padding(top = 8.dp)
             )
     }
 }
@@ -458,7 +473,7 @@ fun LlamadaFunciones3(navController: NavController, modifier: Modifier){
         horizontalAlignment = Alignment.CenterHorizontally
     ){
 
-            Spacer(modifier = Modifier.size(100.dp))
+            Spacer(modifier = Modifier.size(70.dp))
             MostrarDatosUsuario()
 
         //ElevatedCardExample()

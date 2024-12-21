@@ -129,7 +129,7 @@ fun LoginScreen(navController: NavController, onLoginSuccess: () -> Unit){
                 password = it
                 mostrarErrorNumCaracteres = password.length < 6
             },
-            label = { Text("Password") },
+            label = { Text("Contraseña") },
             shape = RoundedCornerShape(16.dp),
             colors = outlinedTextFieldColors(
                 unfocusedBorderColor = Color.Gray,

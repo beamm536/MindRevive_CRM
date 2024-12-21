@@ -321,13 +321,15 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
                         return@Button
                     }
 
+                    navController.navigate("inicioAppCRM")
+
                     //TOAST PARA MOSTRAR MENSAJE DE Q EL USUARIO SE HA REGISTRADO --> explicado en apuntesRegistro
                     Toast.makeText(
                         contextoApp,
                         "El usuario se ha registrado correctamente",
                         Toast.LENGTH_SHORT
                     ).show()
-                    navController.navigate("pantallaInicio")
+                    //navController.navigate("inicioAppCRM")
 
                     OnclickBtnRegistrar(
                         nombre = nombre,
@@ -340,12 +342,12 @@ fun CamposRegistroUsuario(navController: NavController ,modifier: Modifier = Mod
                         navController = NavController(contextoApp)
 
                     )
-                    //navController.navigate("pantallaInicio")
+                    //navController.navigate("inicioAppCRM")
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = MarronBtns)
             ) {
-                Text("Create an account")
+                Text("Crear una cuenta")
             }
         }
 
@@ -428,7 +430,6 @@ fun OnclickBtnRegistrar(
                                                 "Registro",
                                                 "Usuario guardado exitosamente en Firestore"
                                             )
-                                            navController.navigate("pantallaInicio")
                                         }
                                         .addOnFailureListener {
                                             // Manejo de errores al guardar en Firestore

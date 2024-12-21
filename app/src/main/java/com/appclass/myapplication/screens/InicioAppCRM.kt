@@ -56,7 +56,7 @@ fun TituloInicioAPP(modifier: Modifier = Modifier){
     {
 
         Text(
-            text = "Welcome!",
+            text = "Bienvenido!",
             fontWeight = FontWeight.Bold,
             fontSize = 48.sp,
             color = NegroLetras

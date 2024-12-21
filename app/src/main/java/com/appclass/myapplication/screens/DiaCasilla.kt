@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.navigation.NavController
+import com.appclass.myapplication.ui.theme.MoradoTextFields
 
 @Composable
 fun DiaCasilla(dia: Int, diaActual: Boolean, tieneCita: Boolean, onClick: () -> Unit) {
@@ -40,7 +41,7 @@ fun DiaCasilla(dia: Int, diaActual: Boolean, tieneCita: Boolean, onClick: () -> 
                 modifier = Modifier
                     .size(40.dp)
                     .background(
-                        color = if (diaActual) Color.Blue else Color.Transparent,
+                        color = if (diaActual) MoradoTextFields else Color.Transparent,
                         shape = CircleShape
                     ),
                 contentAlignment = Alignment.Center
