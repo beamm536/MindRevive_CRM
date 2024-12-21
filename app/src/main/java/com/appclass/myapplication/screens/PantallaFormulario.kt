@@ -281,10 +281,10 @@ fun FormularioInput(navController: NavController) {
 @Composable
 fun EstadoAnimoSelector(estadoAnimo: MutableState<Int>, onEstadoAnimoChange: (Int) -> Unit) {
     val coloresEstadoAnimo = listOf(
-        Color.Red, // 1 -> Rojo
-        Color(0xFFFF6F00), // 2 -> Naranja
-        Color.Yellow, // 3 -> Amarillo
-        Color.Green, // 4 -> Verde
+        Color(0xffF08080), // 1 -> Rojo
+        Color(0xFFFFA54D), // 2 -> Naranja
+        Color(0xFFFFD580), // 3 -> Amarillo
+        Color(0xFF6CCF6C), // 4 -> Verde
         Color(0xFF4CAF50)  // 5 -> Verde oscuro
     )
 

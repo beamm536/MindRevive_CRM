@@ -28,7 +28,3 @@ todos los campos), después de eso metemos el metodo propio ---> q se va a encag
    unos segundos
 
 4. **show()** --> llama al metodo para mostrar el componente toast
-
-
-## DUDA :)
-- tengo q pasar la edad de tipo INT a String? es necesario??

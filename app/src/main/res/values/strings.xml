@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">My Application</string>
-    <string name="createAccount"> Create an account </string>
-    <string name="login"> Log In </string>
+    <string name="createAccount"> Crear Cuenta </string>
+    <string name="login"> Iniciar Sesión </string>
 </resources>
